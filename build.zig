@@ -28,6 +28,7 @@ pub fn build(b: *std.Build) !void {
         b.allocator,
         "VERSION",
         128,
+        .{},
     )) |content| std.mem.trim(
         u8,
         content,
