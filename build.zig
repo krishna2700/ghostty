@@ -28,7 +28,7 @@ pub fn build(b: *std.Build) !void {
         const root = b.build_root.path orelse ".";
         const version_path = std.fs.path.join(b.allocator, &.{ root, "VERSION" }) catch break :blk null;
         defer b.allocator.free(version_path);
-        const contents = std.fs.cwd().readFileAlloc(b.allocator, version_path, 128) catch break :blk null;
+        const contents = std.Io.Dir.cwd().readFileAlloc(b.graph.io, version_path, b.allocator, .{ .bytes = 128 }) catch break :blk null;
         defer b.allocator.free(contents);
         const trimmed = std.mem.trim(u8, contents, &std.ascii.whitespace);
         if (trimmed.len == 0) break :blk null;
