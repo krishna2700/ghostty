@@ -38,18 +38,20 @@ pub fn main() !void {
     try script.appendSlice(alloc, "SAVE\nEND\n");
 
     var child: std.process.Child = .init(&.{ zig_exe, "ar", "-M" }, alloc);
-    child.stdin_behavior = .Pipe;
-    child.stdout_behavior = .Inherit;
-    child.stderr_behavior = .Inherit;
+    child.stdin = .pipe;
+    child.stdout = .inherit;
+    child.stderr = .inherit;
 
-    try child.spawn();
-    try child.stdin.?.writeAll(script.items);
-    child.stdin.?.close();
-    child.stdin = null;
+    var threaded: std.Io.Threaded = .init(std.heap.page_allocator, .{});
+    const io = threaded.io();
+    try child.spawn(io);
+    try child.stdin_handle.?.writeAll(script.items);
+    child.stdin_handle.?.close();
+    child.stdin_handle = null;
 
-    const term = try child.wait();
-    if (term.Exited != 0) {
-        std.log.err("zig ar -M exited with code {d}", .{term.Exited});
+    const term = try child.wait(io);
+    if (term.Exited.code != 0) {
+        std.log.err("zig ar -M exited with code {d}", .{term.Exited.code});
         std.process.exit(1);
     }
 }

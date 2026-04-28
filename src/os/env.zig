@@ -11,7 +11,7 @@ pub fn getEnvMap(alloc: Allocator) !std.process.Environ.Map {
     return if (isFlatpak())
         std.process.Environ.Map.init(alloc)
     else
-        try (std.process.Environ{ .block = .global }).createMap(alloc);
+        try (std.process.Environ{ .block = .{ .slice = @ptrCast(std.posix.environ) } }).createMap(alloc);
 }
 
 /// Append a value to an environment variable such as PATH.

@@ -69,9 +69,9 @@ fn initPager(alloc: Allocator) ?std.process.Child {
     if (cmd == null) return null;
 
     var child: std.process.Child = .init(&.{cmd.?}, alloc);
-    child.stdin_behavior = .Pipe;
-    child.stdout_behavior = .Inherit;
-    child.stderr_behavior = .Inherit;
+    child.stdin = .pipe;
+    child.stdout = .inherit;
+    child.stderr = .inherit;
 
     child.spawn() catch return null;
     return child;

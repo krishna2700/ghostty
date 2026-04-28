@@ -48,7 +48,7 @@ pub fn init(
         },
     };
 
-    const env = try (std.process.Environ{ .block = .global }).createMap(b.allocator);
+    const env = try (std.process.Environ{ .block = .{ .slice = @ptrCast(std.posix.environ) } }).createMap(b.allocator);
     const app_path = b.fmt("macos/build/{s}/Blackbox.app", .{xc_config});
 
     // Our step to build the Ghostty macOS app.

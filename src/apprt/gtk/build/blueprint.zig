@@ -80,8 +80,8 @@ pub fn main() !void {
             },
             alloc,
         );
-        blueprint_compiler.stdout_behavior = .Pipe;
-        blueprint_compiler.stderr_behavior = .Pipe;
+        blueprint_compiler.stdout = .pipe;
+        blueprint_compiler.stderr = .pipe;
         try blueprint_compiler.spawn();
         try blueprint_compiler.collectOutput(
             alloc,
@@ -137,8 +137,8 @@ pub fn main() !void {
             },
             alloc,
         );
-        blueprint_compiler.stdout_behavior = .Pipe;
-        blueprint_compiler.stderr_behavior = .Pipe;
+        blueprint_compiler.stdout = .pipe;
+        blueprint_compiler.stderr = .pipe;
         try blueprint_compiler.spawn();
         try blueprint_compiler.collectOutput(
             alloc,

@@ -23,7 +23,7 @@ pub fn detect(b: *std.Build) !Version {
         const tmp: []u8 = b.runAllowFail(
             &[_][]const u8{ "git", "-C", b.build_root.path orelse ".", "rev-parse", "--abbrev-ref", "HEAD" },
             &code,
-            .Ignore,
+            .close,
         ) catch |err| switch (err) {
             error.FileNotFound => return error.GitNotFound,
             error.ExitCodeFailure => return error.GitNotRepository,
@@ -44,7 +44,7 @@ pub fn detect(b: *std.Build) !Version {
         const output = b.runAllowFail(
             &[_][]const u8{ "git", "-C", b.build_root.path orelse ".", "-c", "log.showSignature=false", "log", "--pretty=format:%h", "-n", "1" },
             &code,
-            .Ignore,
+            .close,
         ) catch |err| switch (err) {
             error.FileNotFound => return error.GitNotFound,
             else => return err,
@@ -56,7 +56,7 @@ pub fn detect(b: *std.Build) !Version {
     const tag = b.runAllowFail(
         &[_][]const u8{ "git", "-C", b.build_root.path orelse ".", "describe", "--exact-match", "--tags" },
         &code,
-        .Ignore,
+        .close,
     ) catch |err| switch (err) {
         error.FileNotFound => return error.GitNotFound,
         error.ExitCodeFailure => "", // expected

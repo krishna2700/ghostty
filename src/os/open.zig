@@ -46,14 +46,14 @@ pub fn open(
 
     // Pipe stdout/stderr so we can collect output from the command.
     // This must be set before spawning the process.
-    exe.stdout_behavior = .Pipe;
-    exe.stderr_behavior = .Pipe;
+    exe.stdout = .pipe;
+    exe.stderr = .pipe;
 
     // In the snap on Linux the launcher exports LD_LIBRARY_PATH pointing at
     // the snap's bundled libraries. Leaking this into child process can
     // can be problematic, so let's drop it from the env
     var snap_env: std.process.Environ.Map = if (comptime build_config.snap) blk: {
-        var env = try (std.process.Environ{ .block = .global }).createMap(alloc);
+        var env = try (std.process.Environ{ .block = .{ .slice = @ptrCast(std.posix.environ) } }).createMap(alloc);
         env.remove("LD_LIBRARY_PATH");
         break :blk env;
     } else undefined;

@@ -125,7 +125,7 @@ pub fn init(b: *std.Build, appVersion: []const u8, libVersion: []const u8) !Conf
     const gtk_targets = gtk.targets(b);
 
     // We use env vars throughout the build so we grab them immediately here.
-    var env = try (std.process.Environ{ .block = .global }).createMap(b.allocator);
+    var env = try (std.process.Environ{ .block = .{ .slice = @ptrCast(std.posix.environ) } }).createMap(b.allocator);
     errdefer env.deinit();
 
     var config: Config = .{
