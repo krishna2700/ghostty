@@ -25,9 +25,10 @@ pub fn build(b: *std.Build) !void {
     // use that as the version source of truth. Otherwise we fall back
     // to what is in the build.zig.zon.
     const file_version: ?[]const u8 = blk: {
-        const f = b.build_root.handle.openFile("VERSION", .{}) catch break :blk null;
+        const io = std.io.io();
+        const f = b.build_root.handle.openFile(io, "VERSION", .{}) catch break :blk null;
         defer f.close();
-        const content = f.readToEndAlloc(b.allocator, 128) catch break :blk null;
+        const content = f.readToEndAlloc(io, b.allocator, 128) catch break :blk null;
         break :blk std.mem.trim(u8, content, &std.ascii.whitespace);
     };
 
