@@ -7,11 +7,11 @@ const isFlatpak = @import("flatpak.zig").isFlatpak;
 pub const Error = Allocator.Error;
 
 /// Get the environment map.
-pub fn getEnvMap(alloc: Allocator) !std.process.EnvMap {
+pub fn getEnvMap(alloc: Allocator) !std.process.Environ.Map {
     return if (isFlatpak())
-        std.process.EnvMap.init(alloc)
+        std.process.Environ.Map.init(alloc)
     else
-        try std.process.getEnvMap(alloc);
+        try (std.process.Environ{ .block = .global }).createMap(alloc);
 }
 
 /// Append a value to an environment variable such as PATH.

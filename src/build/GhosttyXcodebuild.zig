@@ -48,14 +48,14 @@ pub fn init(
         },
     };
 
-    const env = try std.process.getEnvMap(b.allocator);
+    const env = try (std.process.Environ{ .block = .global }).createMap(b.allocator);
     const app_path = b.fmt("macos/build/{s}/Blackbox.app", .{xc_config});
 
     // Our step to build the Ghostty macOS app.
     const build = build: {
         // External environment variables can mess up xcodebuild, so
         // we create a new empty environment.
-        const env_map = try b.allocator.create(std.process.EnvMap);
+        const env_map = try b.allocator.create(std.process.Environ.Map);
         env_map.* = .init(b.allocator);
         if (env.get("PATH")) |v| try env_map.put("PATH", v);
 
@@ -91,7 +91,7 @@ pub fn init(
     };
 
     const xctest = xctest: {
-        const env_map = try b.allocator.create(std.process.EnvMap);
+        const env_map = try b.allocator.create(std.process.Environ.Map);
         env_map.* = .init(b.allocator);
         if (env.get("PATH")) |v| try env_map.put("PATH", v);
 

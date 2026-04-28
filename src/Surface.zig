@@ -641,7 +641,7 @@ pub fn init(
             // If an error occurs, we don't want to block surface startup.
             log.warn("error getting env map for surface err={}", .{err});
             break :env internal_os.getEnvMap(alloc) catch
-                std.process.EnvMap.init(alloc);
+                std.process.Environ.Map.init(alloc);
         };
         errdefer env.deinit();
 

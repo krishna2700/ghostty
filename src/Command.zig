@@ -30,7 +30,7 @@ const debug = std.debug;
 const testing = std.testing;
 const Allocator = std.mem.Allocator;
 const File = std.fs.File;
-const EnvMap = std.process.EnvMap;
+const EnvMap = std.process.Environ.Map;
 const apprt = @import("apprt.zig");
 
 /// Function prototype for a function executed /in the child process/ after the
