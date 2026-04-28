@@ -28,10 +28,15 @@ pub fn build(b: *std.Build) !void {
         const root = b.build_root.path orelse ".";
         const version_path = std.fs.path.join(b.allocator, &.{ root, "VERSION" }) catch break :blk null;
         defer b.allocator.free(version_path);
-        const f = std.fs.openFileAbsolute(version_path, .{}) catch break :blk null;
-        defer f.close();
-        const content = f.reader().readAllAlloc(b.allocator, 128) catch break :blk null;
-        break :blk std.mem.trim(u8, content, &std.ascii.whitespace);
+        const result = std.process.Child.run(.{
+            .allocator = b.allocator,
+            .argv = &.{ "cat", version_path },
+        }) catch break :blk null;
+        defer b.allocator.free(result.stdout);
+        defer b.allocator.free(result.stderr);
+        if (result.stdout.len == 0) break :blk null;
+        const trimmed = std.mem.trim(u8, result.stdout, &std.ascii.whitespace);
+        break :blk b.allocator.dupe(u8, trimmed) catch break :blk null;
     };
 
     const config = try buildpkg.Config.init(
