@@ -84,7 +84,7 @@ fn initTarget(
 ) !void {
     // Update our metallib
     self.metallib = .create(b, .{
-        .name = "Ghostty",
+        .name = "Blackbox",
         .target = target,
         .sources = &.{b.path("src/renderer/shaders/shaders.metal")},
     });

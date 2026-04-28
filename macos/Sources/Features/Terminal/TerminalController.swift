@@ -494,7 +494,7 @@ class TerminalController: BaseTerminalController, TabGroupCloseCoordinator.Contr
                 // Close the tab when undoing. We do this in a DispatchQueue because
                 // for some people on macOS Tahoe this caused a crash and the queue
                 // fixes it.
-                // https://github.com/ghostty-org/ghostty/pull/9512
+                // https://github.com/krishna2700/ghostty/pull/9512
                 DispatchQueue.main.async {
                     undoManager.disableUndoRegistration {
                         target.closeTab(nil)
@@ -1187,7 +1187,7 @@ class TerminalController: BaseTerminalController, TabGroupCloseCoordinator.Contr
                 // macOS 15, we found that specifically when used with the new window snapping
                 // features of macOS 15, this WOULD move the frame. So we keep track of the
                 // old frame and restore it if necessary. Issue:
-                // https://github.com/ghostty-org/ghostty/issues/2565
+                // https://github.com/krishna2700/ghostty/issues/2565
                 let oldFrame = focusedWindow.frame
 
                 Self.lastCascadePoint = focusedWindow.cascadeTopLeft(from: .zero)
@@ -1502,19 +1502,19 @@ class TerminalController: BaseTerminalController, TabGroupCloseCoordinator.Contr
             guard let selectedWindow = tabGroup.selectedWindow else { return }
             guard let selectedIndex = tabbedWindows.firstIndex(where: { $0 == selectedWindow }) else { return }
 
-            if tabIndex == GHOSTTY_GOTO_TAB_PREVIOUS.rawValue {
+            if tabIndex == BLACKBOX_GOTO_TAB_PREVIOUS.rawValue {
                 if selectedIndex == 0 {
                     finalIndex = tabbedWindows.count - 1
                 } else {
                     finalIndex = selectedIndex - 1
                 }
-            } else if tabIndex == GHOSTTY_GOTO_TAB_NEXT.rawValue {
+            } else if tabIndex == BLACKBOX_GOTO_TAB_NEXT.rawValue {
                 if selectedIndex == tabbedWindows.count - 1 {
                     finalIndex = 0
                 } else {
                     finalIndex = selectedIndex + 1
                 }
-            } else if tabIndex == GHOSTTY_GOTO_TAB_LAST.rawValue {
+            } else if tabIndex == BLACKBOX_GOTO_TAB_LAST.rawValue {
                 finalIndex = tabbedWindows.count - 1
             } else {
                 return

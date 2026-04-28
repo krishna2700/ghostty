@@ -758,7 +758,7 @@ extension Ghostty {
 
             // We also just trigger a backing property change. Just in case the screen has
             // a different scaling factor, this ensures that we update our content scale.
-            // Issue: https://github.com/ghostty-org/ghostty/issues/2731
+            // Issue: https://github.com/krishna2700/ghostty/issues/2731
             DispatchQueue.main.async { [weak self] in
                 self?.viewDidChangeBackingProperties()
             }

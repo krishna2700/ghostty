@@ -29,7 +29,7 @@ extension NSPasteboard.PasteboardType {
 extension NSPasteboard {
     /// The pasteboard to used for Ghostty selection.
     static var ghosttySelection: NSPasteboard = {
-        NSPasteboard(name: .init("com.mitchellh.ghostty.selection"))
+        NSPasteboard(name: .init("com.blackbox.ai.selection"))
     }()
 
     /// Gets the contents of the pasteboard as a string following a specific set of semantics.
@@ -51,10 +51,10 @@ extension NSPasteboard {
     /// The pasteboard for the Ghostty enum type.
     static func ghostty(_ clipboard: ghostty_clipboard_e) -> NSPasteboard? {
         switch clipboard {
-        case GHOSTTY_CLIPBOARD_STANDARD:
+        case BLACKBOX_CLIPBOARD_STANDARD:
             return Self.general
 
-        case GHOSTTY_CLIPBOARD_SELECTION:
+        case BLACKBOX_CLIPBOARD_SELECTION:
             return Self.ghosttySelection
 
         default:

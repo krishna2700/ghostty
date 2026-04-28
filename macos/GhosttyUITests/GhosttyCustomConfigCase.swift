@@ -23,7 +23,7 @@ class GhosttyCustomConfigCase: XCTestCase {
         }
     }
 
-    static let defaultsSuiteName: String = "GHOSTTY_UI_TESTS"
+    static let defaultsSuiteName: String = "BLACKBOX_UI_TESTS"
 
     private let configFile: URL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         .appendingPathExtension("ghostty")
@@ -43,8 +43,8 @@ class GhosttyCustomConfigCase: XCTestCase {
     func ghosttyApplication(defaultsSuite: String = GhosttyCustomConfigCase.defaultsSuiteName) throws -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments.append(contentsOf: ["-ApplePersistenceIgnoreState", "YES"])
-        app.launchEnvironment["GHOSTTY_CONFIG_PATH"] = configFile.path
-        app.launchEnvironment["GHOSTTY_USER_DEFAULTS_SUITE"] = defaultsSuite
+        app.launchEnvironment["BLACKBOX_CONFIG_PATH"] = configFile.path
+        app.launchEnvironment["BLACKBOX_USER_DEFAULTS_SUITE"] = defaultsSuite
         return app
     }
 }

@@ -19,7 +19,7 @@ extension Ghostty {
     static func keyboardShortcut(for trigger: ghostty_input_trigger_s) -> KeyboardShortcut? {
         let key: KeyEquivalent
         switch trigger.tag {
-        case GHOSTTY_TRIGGER_PHYSICAL:
+        case BLACKBOX_TRIGGER_PHYSICAL:
             // Only functional keys can be converted to a KeyboardShortcut. Other physical
             // mappings cannot because KeyboardShortcut in Swift is inherently layout-dependent.
             if let equiv = Self.keyToEquivalent[trigger.key.physical] {
@@ -28,14 +28,14 @@ extension Ghostty {
                 return nil
             }
 
-        case GHOSTTY_TRIGGER_UNICODE:
+        case BLACKBOX_TRIGGER_UNICODE:
             guard
                 let scalar = UnicodeScalar(trigger.key.unicode),
                 let normalized = Character(scalar).lowercased().first
             else { return nil }
             key = KeyEquivalent(normalized)
 
-        case GHOSTTY_TRIGGER_CATCH_ALL:
+        case BLACKBOX_TRIGGER_CATCH_ALL:
             // catch_all matches any key, so it can't be represented as a KeyboardShortcut
             return nil
 
@@ -53,30 +53,30 @@ extension Ghostty {
     /// Returns the event modifier flags set for the Ghostty mods enum.
     static func eventModifierFlags(mods: ghostty_input_mods_e) -> NSEvent.ModifierFlags {
         var flags = NSEvent.ModifierFlags(rawValue: 0)
-        if mods.rawValue & GHOSTTY_MODS_SHIFT.rawValue != 0 { flags.insert(.shift) }
-        if mods.rawValue & GHOSTTY_MODS_CTRL.rawValue != 0 { flags.insert(.control) }
-        if mods.rawValue & GHOSTTY_MODS_ALT.rawValue != 0 { flags.insert(.option) }
-        if mods.rawValue & GHOSTTY_MODS_SUPER.rawValue != 0 { flags.insert(.command) }
+        if mods.rawValue & BLACKBOX_MODS_SHIFT.rawValue != 0 { flags.insert(.shift) }
+        if mods.rawValue & BLACKBOX_MODS_CTRL.rawValue != 0 { flags.insert(.control) }
+        if mods.rawValue & BLACKBOX_MODS_ALT.rawValue != 0 { flags.insert(.option) }
+        if mods.rawValue & BLACKBOX_MODS_SUPER.rawValue != 0 { flags.insert(.command) }
         return flags
     }
 
     /// Translate event modifier flags to a ghostty mods enum.
     static func ghosttyMods(_ flags: NSEvent.ModifierFlags) -> ghostty_input_mods_e {
-        var mods: UInt32 = GHOSTTY_MODS_NONE.rawValue
+        var mods: UInt32 = BLACKBOX_MODS_NONE.rawValue
 
-        if flags.contains(.shift) { mods |= GHOSTTY_MODS_SHIFT.rawValue }
-        if flags.contains(.control) { mods |= GHOSTTY_MODS_CTRL.rawValue }
-        if flags.contains(.option) { mods |= GHOSTTY_MODS_ALT.rawValue }
-        if flags.contains(.command) { mods |= GHOSTTY_MODS_SUPER.rawValue }
-        if flags.contains(.capsLock) { mods |= GHOSTTY_MODS_CAPS.rawValue }
+        if flags.contains(.shift) { mods |= BLACKBOX_MODS_SHIFT.rawValue }
+        if flags.contains(.control) { mods |= BLACKBOX_MODS_CTRL.rawValue }
+        if flags.contains(.option) { mods |= BLACKBOX_MODS_ALT.rawValue }
+        if flags.contains(.command) { mods |= BLACKBOX_MODS_SUPER.rawValue }
+        if flags.contains(.capsLock) { mods |= BLACKBOX_MODS_CAPS.rawValue }
 
         // Handle sided input. We can't tell that both are pressed in the
         // Ghostty structure but that's okay -- we don't use that information.
         let rawFlags = flags.rawValue
-        if rawFlags & UInt(NX_DEVICERSHIFTKEYMASK) != 0 { mods |= GHOSTTY_MODS_SHIFT_RIGHT.rawValue }
-        if rawFlags & UInt(NX_DEVICERCTLKEYMASK) != 0 { mods |= GHOSTTY_MODS_CTRL_RIGHT.rawValue }
-        if rawFlags & UInt(NX_DEVICERALTKEYMASK) != 0 { mods |= GHOSTTY_MODS_ALT_RIGHT.rawValue }
-        if rawFlags & UInt(NX_DEVICERCMDKEYMASK) != 0 { mods |= GHOSTTY_MODS_SUPER_RIGHT.rawValue }
+        if rawFlags & UInt(NX_DEVICERSHIFTKEYMASK) != 0 { mods |= BLACKBOX_MODS_SHIFT_RIGHT.rawValue }
+        if rawFlags & UInt(NX_DEVICERCTLKEYMASK) != 0 { mods |= BLACKBOX_MODS_CTRL_RIGHT.rawValue }
+        if rawFlags & UInt(NX_DEVICERALTKEYMASK) != 0 { mods |= BLACKBOX_MODS_ALT_RIGHT.rawValue }
+        if rawFlags & UInt(NX_DEVICERCMDKEYMASK) != 0 { mods |= BLACKBOX_MODS_SUPER_RIGHT.rawValue }
 
         return ghostty_input_mods_e(mods)
     }
@@ -86,20 +86,20 @@ extension Ghostty {
     /// mapped to a KeyEquivalent.
     static let keyToEquivalent: [ghostty_input_key_e: KeyEquivalent] = [
         // Function keys
-        GHOSTTY_KEY_ARROW_UP: .upArrow,
-        GHOSTTY_KEY_ARROW_DOWN: .downArrow,
-        GHOSTTY_KEY_ARROW_LEFT: .leftArrow,
-        GHOSTTY_KEY_ARROW_RIGHT: .rightArrow,
-        GHOSTTY_KEY_HOME: .home,
-        GHOSTTY_KEY_END: .end,
-        GHOSTTY_KEY_DELETE: .deleteForward,
-        GHOSTTY_KEY_PAGE_UP: .pageUp,
-        GHOSTTY_KEY_PAGE_DOWN: .pageDown,
-        GHOSTTY_KEY_ESCAPE: .escape,
-        GHOSTTY_KEY_ENTER: .return,
-        GHOSTTY_KEY_TAB: .tab,
-        GHOSTTY_KEY_BACKSPACE: .delete,
-        GHOSTTY_KEY_SPACE: .space,
+        BLACKBOX_KEY_ARROW_UP: .upArrow,
+        BLACKBOX_KEY_ARROW_DOWN: .downArrow,
+        BLACKBOX_KEY_ARROW_LEFT: .leftArrow,
+        BLACKBOX_KEY_ARROW_RIGHT: .rightArrow,
+        BLACKBOX_KEY_HOME: .home,
+        BLACKBOX_KEY_END: .end,
+        BLACKBOX_KEY_DELETE: .deleteForward,
+        BLACKBOX_KEY_PAGE_UP: .pageUp,
+        BLACKBOX_KEY_PAGE_DOWN: .pageDown,
+        BLACKBOX_KEY_ESCAPE: .escape,
+        BLACKBOX_KEY_ENTER: .return,
+        BLACKBOX_KEY_TAB: .tab,
+        BLACKBOX_KEY_BACKSPACE: .delete,
+        BLACKBOX_KEY_SPACE: .space,
     ]
 }
 
@@ -110,10 +110,10 @@ extension Ghostty.Input {
     struct BindingFlags: OptionSet, Sendable {
         let rawValue: UInt32
 
-        static let consumed = BindingFlags(rawValue: GHOSTTY_BINDING_FLAGS_CONSUMED.rawValue)
-        static let all = BindingFlags(rawValue: GHOSTTY_BINDING_FLAGS_ALL.rawValue)
-        static let global = BindingFlags(rawValue: GHOSTTY_BINDING_FLAGS_GLOBAL.rawValue)
-        static let performable = BindingFlags(rawValue: GHOSTTY_BINDING_FLAGS_PERFORMABLE.rawValue)
+        static let consumed = BindingFlags(rawValue: BLACKBOX_BINDING_FLAGS_CONSUMED.rawValue)
+        static let all = BindingFlags(rawValue: BLACKBOX_BINDING_FLAGS_ALL.rawValue)
+        static let global = BindingFlags(rawValue: BLACKBOX_BINDING_FLAGS_GLOBAL.rawValue)
+        static let performable = BindingFlags(rawValue: BLACKBOX_BINDING_FLAGS_PERFORMABLE.rawValue)
 
         init(rawValue: UInt32) {
             self.rawValue = rawValue
@@ -163,9 +163,9 @@ extension Ghostty.Input {
         init?(cValue: ghostty_input_key_s) {
             // Convert action
             switch cValue.action {
-            case GHOSTTY_ACTION_PRESS: self.action = .press
-            case GHOSTTY_ACTION_RELEASE: self.action = .release
-            case GHOSTTY_ACTION_REPEAT: self.action = .repeat
+            case BLACKBOX_ACTION_PRESS: self.action = .press
+            case BLACKBOX_ACTION_RELEASE: self.action = .release
+            case BLACKBOX_ACTION_REPEAT: self.action = .repeat
             default: self.action = .press
             }
 
@@ -235,9 +235,9 @@ extension Ghostty.Input {
 
         var cAction: ghostty_input_action_e {
             switch self {
-            case .release: GHOSTTY_ACTION_RELEASE
-            case .press: GHOSTTY_ACTION_PRESS
-            case .repeat: GHOSTTY_ACTION_REPEAT
+            case .release: BLACKBOX_ACTION_RELEASE
+            case .press: BLACKBOX_ACTION_PRESS
+            case .repeat: BLACKBOX_ACTION_REPEAT
             }
         }
     }
@@ -284,17 +284,17 @@ extension Ghostty.Input {
         init?(state: ghostty_input_mouse_state_e, button: ghostty_input_mouse_button_e, mods: ghostty_input_mods_e) {
             // Convert state
             switch state {
-            case GHOSTTY_MOUSE_RELEASE: self.action = .release
-            case GHOSTTY_MOUSE_PRESS: self.action = .press
+            case BLACKBOX_MOUSE_RELEASE: self.action = .release
+            case BLACKBOX_MOUSE_PRESS: self.action = .press
             default: return nil
             }
 
             // Convert button
             switch button {
-            case GHOSTTY_MOUSE_UNKNOWN: self.button = .unknown
-            case GHOSTTY_MOUSE_LEFT: self.button = .left
-            case GHOSTTY_MOUSE_RIGHT: self.button = .right
-            case GHOSTTY_MOUSE_MIDDLE: self.button = .middle
+            case BLACKBOX_MOUSE_UNKNOWN: self.button = .unknown
+            case BLACKBOX_MOUSE_LEFT: self.button = .left
+            case BLACKBOX_MOUSE_RIGHT: self.button = .right
+            case BLACKBOX_MOUSE_MIDDLE: self.button = .middle
             default: return nil
             }
 
@@ -348,8 +348,8 @@ extension Ghostty.Input {
 
         var cMouseState: ghostty_input_mouse_state_e {
             switch self {
-            case .release: GHOSTTY_MOUSE_RELEASE
-            case .press: GHOSTTY_MOUSE_PRESS
+            case .release: BLACKBOX_MOUSE_RELEASE
+            case .press: BLACKBOX_MOUSE_PRESS
             }
         }
     }
@@ -384,18 +384,18 @@ extension Ghostty.Input {
 
         var cMouseButton: ghostty_input_mouse_button_e {
             switch self {
-            case .unknown: GHOSTTY_MOUSE_UNKNOWN
-            case .left: GHOSTTY_MOUSE_LEFT
-            case .right: GHOSTTY_MOUSE_RIGHT
-            case .middle: GHOSTTY_MOUSE_MIDDLE
-            case .four: GHOSTTY_MOUSE_FOUR
-            case .five: GHOSTTY_MOUSE_FIVE
-            case .six: GHOSTTY_MOUSE_SIX
-            case .seven: GHOSTTY_MOUSE_SEVEN
-            case .eight: GHOSTTY_MOUSE_EIGHT
-            case .nine: GHOSTTY_MOUSE_NINE
-            case .ten: GHOSTTY_MOUSE_TEN
-            case .eleven: GHOSTTY_MOUSE_ELEVEN
+            case .unknown: BLACKBOX_MOUSE_UNKNOWN
+            case .left: BLACKBOX_MOUSE_LEFT
+            case .right: BLACKBOX_MOUSE_RIGHT
+            case .middle: BLACKBOX_MOUSE_MIDDLE
+            case .four: BLACKBOX_MOUSE_FOUR
+            case .five: BLACKBOX_MOUSE_FIVE
+            case .six: BLACKBOX_MOUSE_SIX
+            case .seven: BLACKBOX_MOUSE_SEVEN
+            case .eight: BLACKBOX_MOUSE_EIGHT
+            case .nine: BLACKBOX_MOUSE_NINE
+            case .ten: BLACKBOX_MOUSE_TEN
+            case .eleven: BLACKBOX_MOUSE_ELEVEN
             }
         }
 
@@ -492,13 +492,13 @@ extension Ghostty.Input {
 
         var cMomentum: ghostty_input_mouse_momentum_e {
             switch self {
-            case .none: GHOSTTY_MOUSE_MOMENTUM_NONE
-            case .began: GHOSTTY_MOUSE_MOMENTUM_BEGAN
-            case .stationary: GHOSTTY_MOUSE_MOMENTUM_STATIONARY
-            case .changed: GHOSTTY_MOUSE_MOMENTUM_CHANGED
-            case .ended: GHOSTTY_MOUSE_MOMENTUM_ENDED
-            case .cancelled: GHOSTTY_MOUSE_MOMENTUM_CANCELLED
-            case .mayBegin: GHOSTTY_MOUSE_MOMENTUM_MAY_BEGIN
+            case .none: BLACKBOX_MOUSE_MOMENTUM_NONE
+            case .began: BLACKBOX_MOUSE_MOMENTUM_BEGAN
+            case .stationary: BLACKBOX_MOUSE_MOMENTUM_STATIONARY
+            case .changed: BLACKBOX_MOUSE_MOMENTUM_CHANGED
+            case .ended: BLACKBOX_MOUSE_MOMENTUM_ENDED
+            case .cancelled: BLACKBOX_MOUSE_MOMENTUM_CANCELLED
+            case .mayBegin: BLACKBOX_MOUSE_MOMENTUM_MAY_BEGIN
             }
         }
     }
@@ -544,16 +544,16 @@ extension Ghostty.Input {
     struct Mods: OptionSet {
         let rawValue: UInt32
 
-        static let none = Mods(rawValue: GHOSTTY_MODS_NONE.rawValue)
-        static let shift = Mods(rawValue: GHOSTTY_MODS_SHIFT.rawValue)
-        static let ctrl = Mods(rawValue: GHOSTTY_MODS_CTRL.rawValue)
-        static let alt = Mods(rawValue: GHOSTTY_MODS_ALT.rawValue)
-        static let `super` = Mods(rawValue: GHOSTTY_MODS_SUPER.rawValue)
-        static let caps = Mods(rawValue: GHOSTTY_MODS_CAPS.rawValue)
-        static let shiftRight = Mods(rawValue: GHOSTTY_MODS_SHIFT_RIGHT.rawValue)
-        static let ctrlRight = Mods(rawValue: GHOSTTY_MODS_CTRL_RIGHT.rawValue)
-        static let altRight = Mods(rawValue: GHOSTTY_MODS_ALT_RIGHT.rawValue)
-        static let superRight = Mods(rawValue: GHOSTTY_MODS_SUPER_RIGHT.rawValue)
+        static let none = Mods(rawValue: BLACKBOX_MODS_NONE.rawValue)
+        static let shift = Mods(rawValue: BLACKBOX_MODS_SHIFT.rawValue)
+        static let ctrl = Mods(rawValue: BLACKBOX_MODS_CTRL.rawValue)
+        static let alt = Mods(rawValue: BLACKBOX_MODS_ALT.rawValue)
+        static let `super` = Mods(rawValue: BLACKBOX_MODS_SUPER.rawValue)
+        static let caps = Mods(rawValue: BLACKBOX_MODS_CAPS.rawValue)
+        static let shiftRight = Mods(rawValue: BLACKBOX_MODS_SHIFT_RIGHT.rawValue)
+        static let ctrlRight = Mods(rawValue: BLACKBOX_MODS_CTRL_RIGHT.rawValue)
+        static let altRight = Mods(rawValue: BLACKBOX_MODS_ALT_RIGHT.rawValue)
+        static let superRight = Mods(rawValue: BLACKBOX_MODS_SUPER_RIGHT.rawValue)
 
         var cMods: ghostty_input_mods_e {
             ghostty_input_mods_e(rawValue)
@@ -786,195 +786,195 @@ extension Ghostty.Input {
         var cKey: ghostty_input_key_e {
             switch self {
             // Writing System Keys
-            case .backquote: GHOSTTY_KEY_BACKQUOTE
-            case .backslash: GHOSTTY_KEY_BACKSLASH
-            case .bracketLeft: GHOSTTY_KEY_BRACKET_LEFT
-            case .bracketRight: GHOSTTY_KEY_BRACKET_RIGHT
-            case .comma: GHOSTTY_KEY_COMMA
-            case .digit0: GHOSTTY_KEY_DIGIT_0
-            case .digit1: GHOSTTY_KEY_DIGIT_1
-            case .digit2: GHOSTTY_KEY_DIGIT_2
-            case .digit3: GHOSTTY_KEY_DIGIT_3
-            case .digit4: GHOSTTY_KEY_DIGIT_4
-            case .digit5: GHOSTTY_KEY_DIGIT_5
-            case .digit6: GHOSTTY_KEY_DIGIT_6
-            case .digit7: GHOSTTY_KEY_DIGIT_7
-            case .digit8: GHOSTTY_KEY_DIGIT_8
-            case .digit9: GHOSTTY_KEY_DIGIT_9
-            case .equal: GHOSTTY_KEY_EQUAL
-            case .intlBackslash: GHOSTTY_KEY_INTL_BACKSLASH
-            case .intlRo: GHOSTTY_KEY_INTL_RO
-            case .intlYen: GHOSTTY_KEY_INTL_YEN
-            case .a: GHOSTTY_KEY_A
-            case .b: GHOSTTY_KEY_B
-            case .c: GHOSTTY_KEY_C
-            case .d: GHOSTTY_KEY_D
-            case .e: GHOSTTY_KEY_E
-            case .f: GHOSTTY_KEY_F
-            case .g: GHOSTTY_KEY_G
-            case .h: GHOSTTY_KEY_H
-            case .i: GHOSTTY_KEY_I
-            case .j: GHOSTTY_KEY_J
-            case .k: GHOSTTY_KEY_K
-            case .l: GHOSTTY_KEY_L
-            case .m: GHOSTTY_KEY_M
-            case .n: GHOSTTY_KEY_N
-            case .o: GHOSTTY_KEY_O
-            case .p: GHOSTTY_KEY_P
-            case .q: GHOSTTY_KEY_Q
-            case .r: GHOSTTY_KEY_R
-            case .s: GHOSTTY_KEY_S
-            case .t: GHOSTTY_KEY_T
-            case .u: GHOSTTY_KEY_U
-            case .v: GHOSTTY_KEY_V
-            case .w: GHOSTTY_KEY_W
-            case .x: GHOSTTY_KEY_X
-            case .y: GHOSTTY_KEY_Y
-            case .z: GHOSTTY_KEY_Z
-            case .minus: GHOSTTY_KEY_MINUS
-            case .period: GHOSTTY_KEY_PERIOD
-            case .quote: GHOSTTY_KEY_QUOTE
-            case .semicolon: GHOSTTY_KEY_SEMICOLON
-            case .slash: GHOSTTY_KEY_SLASH
+            case .backquote: BLACKBOX_KEY_BACKQUOTE
+            case .backslash: BLACKBOX_KEY_BACKSLASH
+            case .bracketLeft: BLACKBOX_KEY_BRACKET_LEFT
+            case .bracketRight: BLACKBOX_KEY_BRACKET_RIGHT
+            case .comma: BLACKBOX_KEY_COMMA
+            case .digit0: BLACKBOX_KEY_DIGIT_0
+            case .digit1: BLACKBOX_KEY_DIGIT_1
+            case .digit2: BLACKBOX_KEY_DIGIT_2
+            case .digit3: BLACKBOX_KEY_DIGIT_3
+            case .digit4: BLACKBOX_KEY_DIGIT_4
+            case .digit5: BLACKBOX_KEY_DIGIT_5
+            case .digit6: BLACKBOX_KEY_DIGIT_6
+            case .digit7: BLACKBOX_KEY_DIGIT_7
+            case .digit8: BLACKBOX_KEY_DIGIT_8
+            case .digit9: BLACKBOX_KEY_DIGIT_9
+            case .equal: BLACKBOX_KEY_EQUAL
+            case .intlBackslash: BLACKBOX_KEY_INTL_BACKSLASH
+            case .intlRo: BLACKBOX_KEY_INTL_RO
+            case .intlYen: BLACKBOX_KEY_INTL_YEN
+            case .a: BLACKBOX_KEY_A
+            case .b: BLACKBOX_KEY_B
+            case .c: BLACKBOX_KEY_C
+            case .d: BLACKBOX_KEY_D
+            case .e: BLACKBOX_KEY_E
+            case .f: BLACKBOX_KEY_F
+            case .g: BLACKBOX_KEY_G
+            case .h: BLACKBOX_KEY_H
+            case .i: BLACKBOX_KEY_I
+            case .j: BLACKBOX_KEY_J
+            case .k: BLACKBOX_KEY_K
+            case .l: BLACKBOX_KEY_L
+            case .m: BLACKBOX_KEY_M
+            case .n: BLACKBOX_KEY_N
+            case .o: BLACKBOX_KEY_O
+            case .p: BLACKBOX_KEY_P
+            case .q: BLACKBOX_KEY_Q
+            case .r: BLACKBOX_KEY_R
+            case .s: BLACKBOX_KEY_S
+            case .t: BLACKBOX_KEY_T
+            case .u: BLACKBOX_KEY_U
+            case .v: BLACKBOX_KEY_V
+            case .w: BLACKBOX_KEY_W
+            case .x: BLACKBOX_KEY_X
+            case .y: BLACKBOX_KEY_Y
+            case .z: BLACKBOX_KEY_Z
+            case .minus: BLACKBOX_KEY_MINUS
+            case .period: BLACKBOX_KEY_PERIOD
+            case .quote: BLACKBOX_KEY_QUOTE
+            case .semicolon: BLACKBOX_KEY_SEMICOLON
+            case .slash: BLACKBOX_KEY_SLASH
 
             // Functional Keys
-            case .altLeft: GHOSTTY_KEY_ALT_LEFT
-            case .altRight: GHOSTTY_KEY_ALT_RIGHT
-            case .backspace: GHOSTTY_KEY_BACKSPACE
-            case .capsLock: GHOSTTY_KEY_CAPS_LOCK
-            case .contextMenu: GHOSTTY_KEY_CONTEXT_MENU
-            case .controlLeft: GHOSTTY_KEY_CONTROL_LEFT
-            case .controlRight: GHOSTTY_KEY_CONTROL_RIGHT
-            case .enter: GHOSTTY_KEY_ENTER
-            case .metaLeft: GHOSTTY_KEY_META_LEFT
-            case .metaRight: GHOSTTY_KEY_META_RIGHT
-            case .shiftLeft: GHOSTTY_KEY_SHIFT_LEFT
-            case .shiftRight: GHOSTTY_KEY_SHIFT_RIGHT
-            case .space: GHOSTTY_KEY_SPACE
-            case .tab: GHOSTTY_KEY_TAB
-            case .convert: GHOSTTY_KEY_CONVERT
-            case .kanaMode: GHOSTTY_KEY_KANA_MODE
-            case .nonConvert: GHOSTTY_KEY_NON_CONVERT
+            case .altLeft: BLACKBOX_KEY_ALT_LEFT
+            case .altRight: BLACKBOX_KEY_ALT_RIGHT
+            case .backspace: BLACKBOX_KEY_BACKSPACE
+            case .capsLock: BLACKBOX_KEY_CAPS_LOCK
+            case .contextMenu: BLACKBOX_KEY_CONTEXT_MENU
+            case .controlLeft: BLACKBOX_KEY_CONTROL_LEFT
+            case .controlRight: BLACKBOX_KEY_CONTROL_RIGHT
+            case .enter: BLACKBOX_KEY_ENTER
+            case .metaLeft: BLACKBOX_KEY_META_LEFT
+            case .metaRight: BLACKBOX_KEY_META_RIGHT
+            case .shiftLeft: BLACKBOX_KEY_SHIFT_LEFT
+            case .shiftRight: BLACKBOX_KEY_SHIFT_RIGHT
+            case .space: BLACKBOX_KEY_SPACE
+            case .tab: BLACKBOX_KEY_TAB
+            case .convert: BLACKBOX_KEY_CONVERT
+            case .kanaMode: BLACKBOX_KEY_KANA_MODE
+            case .nonConvert: BLACKBOX_KEY_NON_CONVERT
 
             // Control Pad Section
-            case .delete: GHOSTTY_KEY_DELETE
-            case .end: GHOSTTY_KEY_END
-            case .help: GHOSTTY_KEY_HELP
-            case .home: GHOSTTY_KEY_HOME
-            case .insert: GHOSTTY_KEY_INSERT
-            case .pageDown: GHOSTTY_KEY_PAGE_DOWN
-            case .pageUp: GHOSTTY_KEY_PAGE_UP
+            case .delete: BLACKBOX_KEY_DELETE
+            case .end: BLACKBOX_KEY_END
+            case .help: BLACKBOX_KEY_HELP
+            case .home: BLACKBOX_KEY_HOME
+            case .insert: BLACKBOX_KEY_INSERT
+            case .pageDown: BLACKBOX_KEY_PAGE_DOWN
+            case .pageUp: BLACKBOX_KEY_PAGE_UP
 
             // Arrow Pad Section
-            case .arrowDown: GHOSTTY_KEY_ARROW_DOWN
-            case .arrowLeft: GHOSTTY_KEY_ARROW_LEFT
-            case .arrowRight: GHOSTTY_KEY_ARROW_RIGHT
-            case .arrowUp: GHOSTTY_KEY_ARROW_UP
+            case .arrowDown: BLACKBOX_KEY_ARROW_DOWN
+            case .arrowLeft: BLACKBOX_KEY_ARROW_LEFT
+            case .arrowRight: BLACKBOX_KEY_ARROW_RIGHT
+            case .arrowUp: BLACKBOX_KEY_ARROW_UP
 
             // Numpad Section
-            case .numLock: GHOSTTY_KEY_NUM_LOCK
-            case .numpad0: GHOSTTY_KEY_NUMPAD_0
-            case .numpad1: GHOSTTY_KEY_NUMPAD_1
-            case .numpad2: GHOSTTY_KEY_NUMPAD_2
-            case .numpad3: GHOSTTY_KEY_NUMPAD_3
-            case .numpad4: GHOSTTY_KEY_NUMPAD_4
-            case .numpad5: GHOSTTY_KEY_NUMPAD_5
-            case .numpad6: GHOSTTY_KEY_NUMPAD_6
-            case .numpad7: GHOSTTY_KEY_NUMPAD_7
-            case .numpad8: GHOSTTY_KEY_NUMPAD_8
-            case .numpad9: GHOSTTY_KEY_NUMPAD_9
-            case .numpadAdd: GHOSTTY_KEY_NUMPAD_ADD
-            case .numpadBackspace: GHOSTTY_KEY_NUMPAD_BACKSPACE
-            case .numpadClear: GHOSTTY_KEY_NUMPAD_CLEAR
-            case .numpadClearEntry: GHOSTTY_KEY_NUMPAD_CLEAR_ENTRY
-            case .numpadComma: GHOSTTY_KEY_NUMPAD_COMMA
-            case .numpadDecimal: GHOSTTY_KEY_NUMPAD_DECIMAL
-            case .numpadDivide: GHOSTTY_KEY_NUMPAD_DIVIDE
-            case .numpadEnter: GHOSTTY_KEY_NUMPAD_ENTER
-            case .numpadEqual: GHOSTTY_KEY_NUMPAD_EQUAL
-            case .numpadMemoryAdd: GHOSTTY_KEY_NUMPAD_MEMORY_ADD
-            case .numpadMemoryClear: GHOSTTY_KEY_NUMPAD_MEMORY_CLEAR
-            case .numpadMemoryRecall: GHOSTTY_KEY_NUMPAD_MEMORY_RECALL
-            case .numpadMemoryStore: GHOSTTY_KEY_NUMPAD_MEMORY_STORE
-            case .numpadMemorySubtract: GHOSTTY_KEY_NUMPAD_MEMORY_SUBTRACT
-            case .numpadMultiply: GHOSTTY_KEY_NUMPAD_MULTIPLY
-            case .numpadParenLeft: GHOSTTY_KEY_NUMPAD_PAREN_LEFT
-            case .numpadParenRight: GHOSTTY_KEY_NUMPAD_PAREN_RIGHT
-            case .numpadSubtract: GHOSTTY_KEY_NUMPAD_SUBTRACT
-            case .numpadSeparator: GHOSTTY_KEY_NUMPAD_SEPARATOR
-            case .numpadUp: GHOSTTY_KEY_NUMPAD_UP
-            case .numpadDown: GHOSTTY_KEY_NUMPAD_DOWN
-            case .numpadRight: GHOSTTY_KEY_NUMPAD_RIGHT
-            case .numpadLeft: GHOSTTY_KEY_NUMPAD_LEFT
-            case .numpadBegin: GHOSTTY_KEY_NUMPAD_BEGIN
-            case .numpadHome: GHOSTTY_KEY_NUMPAD_HOME
-            case .numpadEnd: GHOSTTY_KEY_NUMPAD_END
-            case .numpadInsert: GHOSTTY_KEY_NUMPAD_INSERT
-            case .numpadDelete: GHOSTTY_KEY_NUMPAD_DELETE
-            case .numpadPageUp: GHOSTTY_KEY_NUMPAD_PAGE_UP
-            case .numpadPageDown: GHOSTTY_KEY_NUMPAD_PAGE_DOWN
+            case .numLock: BLACKBOX_KEY_NUM_LOCK
+            case .numpad0: BLACKBOX_KEY_NUMPAD_0
+            case .numpad1: BLACKBOX_KEY_NUMPAD_1
+            case .numpad2: BLACKBOX_KEY_NUMPAD_2
+            case .numpad3: BLACKBOX_KEY_NUMPAD_3
+            case .numpad4: BLACKBOX_KEY_NUMPAD_4
+            case .numpad5: BLACKBOX_KEY_NUMPAD_5
+            case .numpad6: BLACKBOX_KEY_NUMPAD_6
+            case .numpad7: BLACKBOX_KEY_NUMPAD_7
+            case .numpad8: BLACKBOX_KEY_NUMPAD_8
+            case .numpad9: BLACKBOX_KEY_NUMPAD_9
+            case .numpadAdd: BLACKBOX_KEY_NUMPAD_ADD
+            case .numpadBackspace: BLACKBOX_KEY_NUMPAD_BACKSPACE
+            case .numpadClear: BLACKBOX_KEY_NUMPAD_CLEAR
+            case .numpadClearEntry: BLACKBOX_KEY_NUMPAD_CLEAR_ENTRY
+            case .numpadComma: BLACKBOX_KEY_NUMPAD_COMMA
+            case .numpadDecimal: BLACKBOX_KEY_NUMPAD_DECIMAL
+            case .numpadDivide: BLACKBOX_KEY_NUMPAD_DIVIDE
+            case .numpadEnter: BLACKBOX_KEY_NUMPAD_ENTER
+            case .numpadEqual: BLACKBOX_KEY_NUMPAD_EQUAL
+            case .numpadMemoryAdd: BLACKBOX_KEY_NUMPAD_MEMORY_ADD
+            case .numpadMemoryClear: BLACKBOX_KEY_NUMPAD_MEMORY_CLEAR
+            case .numpadMemoryRecall: BLACKBOX_KEY_NUMPAD_MEMORY_RECALL
+            case .numpadMemoryStore: BLACKBOX_KEY_NUMPAD_MEMORY_STORE
+            case .numpadMemorySubtract: BLACKBOX_KEY_NUMPAD_MEMORY_SUBTRACT
+            case .numpadMultiply: BLACKBOX_KEY_NUMPAD_MULTIPLY
+            case .numpadParenLeft: BLACKBOX_KEY_NUMPAD_PAREN_LEFT
+            case .numpadParenRight: BLACKBOX_KEY_NUMPAD_PAREN_RIGHT
+            case .numpadSubtract: BLACKBOX_KEY_NUMPAD_SUBTRACT
+            case .numpadSeparator: BLACKBOX_KEY_NUMPAD_SEPARATOR
+            case .numpadUp: BLACKBOX_KEY_NUMPAD_UP
+            case .numpadDown: BLACKBOX_KEY_NUMPAD_DOWN
+            case .numpadRight: BLACKBOX_KEY_NUMPAD_RIGHT
+            case .numpadLeft: BLACKBOX_KEY_NUMPAD_LEFT
+            case .numpadBegin: BLACKBOX_KEY_NUMPAD_BEGIN
+            case .numpadHome: BLACKBOX_KEY_NUMPAD_HOME
+            case .numpadEnd: BLACKBOX_KEY_NUMPAD_END
+            case .numpadInsert: BLACKBOX_KEY_NUMPAD_INSERT
+            case .numpadDelete: BLACKBOX_KEY_NUMPAD_DELETE
+            case .numpadPageUp: BLACKBOX_KEY_NUMPAD_PAGE_UP
+            case .numpadPageDown: BLACKBOX_KEY_NUMPAD_PAGE_DOWN
 
             // Function Section
-            case .escape: GHOSTTY_KEY_ESCAPE
-            case .f1: GHOSTTY_KEY_F1
-            case .f2: GHOSTTY_KEY_F2
-            case .f3: GHOSTTY_KEY_F3
-            case .f4: GHOSTTY_KEY_F4
-            case .f5: GHOSTTY_KEY_F5
-            case .f6: GHOSTTY_KEY_F6
-            case .f7: GHOSTTY_KEY_F7
-            case .f8: GHOSTTY_KEY_F8
-            case .f9: GHOSTTY_KEY_F9
-            case .f10: GHOSTTY_KEY_F10
-            case .f11: GHOSTTY_KEY_F11
-            case .f12: GHOSTTY_KEY_F12
-            case .f13: GHOSTTY_KEY_F13
-            case .f14: GHOSTTY_KEY_F14
-            case .f15: GHOSTTY_KEY_F15
-            case .f16: GHOSTTY_KEY_F16
-            case .f17: GHOSTTY_KEY_F17
-            case .f18: GHOSTTY_KEY_F18
-            case .f19: GHOSTTY_KEY_F19
-            case .f20: GHOSTTY_KEY_F20
-            case .f21: GHOSTTY_KEY_F21
-            case .f22: GHOSTTY_KEY_F22
-            case .f23: GHOSTTY_KEY_F23
-            case .f24: GHOSTTY_KEY_F24
-            case .f25: GHOSTTY_KEY_F25
-            case .fn: GHOSTTY_KEY_FN
-            case .fnLock: GHOSTTY_KEY_FN_LOCK
-            case .printScreen: GHOSTTY_KEY_PRINT_SCREEN
-            case .scrollLock: GHOSTTY_KEY_SCROLL_LOCK
-            case .pause: GHOSTTY_KEY_PAUSE
+            case .escape: BLACKBOX_KEY_ESCAPE
+            case .f1: BLACKBOX_KEY_F1
+            case .f2: BLACKBOX_KEY_F2
+            case .f3: BLACKBOX_KEY_F3
+            case .f4: BLACKBOX_KEY_F4
+            case .f5: BLACKBOX_KEY_F5
+            case .f6: BLACKBOX_KEY_F6
+            case .f7: BLACKBOX_KEY_F7
+            case .f8: BLACKBOX_KEY_F8
+            case .f9: BLACKBOX_KEY_F9
+            case .f10: BLACKBOX_KEY_F10
+            case .f11: BLACKBOX_KEY_F11
+            case .f12: BLACKBOX_KEY_F12
+            case .f13: BLACKBOX_KEY_F13
+            case .f14: BLACKBOX_KEY_F14
+            case .f15: BLACKBOX_KEY_F15
+            case .f16: BLACKBOX_KEY_F16
+            case .f17: BLACKBOX_KEY_F17
+            case .f18: BLACKBOX_KEY_F18
+            case .f19: BLACKBOX_KEY_F19
+            case .f20: BLACKBOX_KEY_F20
+            case .f21: BLACKBOX_KEY_F21
+            case .f22: BLACKBOX_KEY_F22
+            case .f23: BLACKBOX_KEY_F23
+            case .f24: BLACKBOX_KEY_F24
+            case .f25: BLACKBOX_KEY_F25
+            case .fn: BLACKBOX_KEY_FN
+            case .fnLock: BLACKBOX_KEY_FN_LOCK
+            case .printScreen: BLACKBOX_KEY_PRINT_SCREEN
+            case .scrollLock: BLACKBOX_KEY_SCROLL_LOCK
+            case .pause: BLACKBOX_KEY_PAUSE
 
             // Media Keys
-            case .browserBack: GHOSTTY_KEY_BROWSER_BACK
-            case .browserFavorites: GHOSTTY_KEY_BROWSER_FAVORITES
-            case .browserForward: GHOSTTY_KEY_BROWSER_FORWARD
-            case .browserHome: GHOSTTY_KEY_BROWSER_HOME
-            case .browserRefresh: GHOSTTY_KEY_BROWSER_REFRESH
-            case .browserSearch: GHOSTTY_KEY_BROWSER_SEARCH
-            case .browserStop: GHOSTTY_KEY_BROWSER_STOP
-            case .eject: GHOSTTY_KEY_EJECT
-            case .launchApp1: GHOSTTY_KEY_LAUNCH_APP_1
-            case .launchApp2: GHOSTTY_KEY_LAUNCH_APP_2
-            case .launchMail: GHOSTTY_KEY_LAUNCH_MAIL
-            case .mediaPlayPause: GHOSTTY_KEY_MEDIA_PLAY_PAUSE
-            case .mediaSelect: GHOSTTY_KEY_MEDIA_SELECT
-            case .mediaStop: GHOSTTY_KEY_MEDIA_STOP
-            case .mediaTrackNext: GHOSTTY_KEY_MEDIA_TRACK_NEXT
-            case .mediaTrackPrevious: GHOSTTY_KEY_MEDIA_TRACK_PREVIOUS
-            case .power: GHOSTTY_KEY_POWER
-            case .sleep: GHOSTTY_KEY_SLEEP
-            case .audioVolumeDown: GHOSTTY_KEY_AUDIO_VOLUME_DOWN
-            case .audioVolumeMute: GHOSTTY_KEY_AUDIO_VOLUME_MUTE
-            case .audioVolumeUp: GHOSTTY_KEY_AUDIO_VOLUME_UP
-            case .wakeUp: GHOSTTY_KEY_WAKE_UP
+            case .browserBack: BLACKBOX_KEY_BROWSER_BACK
+            case .browserFavorites: BLACKBOX_KEY_BROWSER_FAVORITES
+            case .browserForward: BLACKBOX_KEY_BROWSER_FORWARD
+            case .browserHome: BLACKBOX_KEY_BROWSER_HOME
+            case .browserRefresh: BLACKBOX_KEY_BROWSER_REFRESH
+            case .browserSearch: BLACKBOX_KEY_BROWSER_SEARCH
+            case .browserStop: BLACKBOX_KEY_BROWSER_STOP
+            case .eject: BLACKBOX_KEY_EJECT
+            case .launchApp1: BLACKBOX_KEY_LAUNCH_APP_1
+            case .launchApp2: BLACKBOX_KEY_LAUNCH_APP_2
+            case .launchMail: BLACKBOX_KEY_LAUNCH_MAIL
+            case .mediaPlayPause: BLACKBOX_KEY_MEDIA_PLAY_PAUSE
+            case .mediaSelect: BLACKBOX_KEY_MEDIA_SELECT
+            case .mediaStop: BLACKBOX_KEY_MEDIA_STOP
+            case .mediaTrackNext: BLACKBOX_KEY_MEDIA_TRACK_NEXT
+            case .mediaTrackPrevious: BLACKBOX_KEY_MEDIA_TRACK_PREVIOUS
+            case .power: BLACKBOX_KEY_POWER
+            case .sleep: BLACKBOX_KEY_SLEEP
+            case .audioVolumeDown: BLACKBOX_KEY_AUDIO_VOLUME_DOWN
+            case .audioVolumeMute: BLACKBOX_KEY_AUDIO_VOLUME_MUTE
+            case .audioVolumeUp: BLACKBOX_KEY_AUDIO_VOLUME_UP
+            case .wakeUp: BLACKBOX_KEY_WAKE_UP
 
             // Legacy, Non-standard, and Special Keys
-            case .copy: GHOSTTY_KEY_COPY
-            case .cut: GHOSTTY_KEY_CUT
-            case .paste: GHOSTTY_KEY_PASTE
+            case .copy: BLACKBOX_KEY_COPY
+            case .cut: BLACKBOX_KEY_CUT
+            case .paste: BLACKBOX_KEY_PASTE
             }
         }
 

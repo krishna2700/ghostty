@@ -273,7 +273,7 @@ private struct CommandPaletteQuery: View {
                     // Grab focus on the first appearance.
                     // Debug and Release build using Xcode 26.4,
                     // has same issue again
-                    // Fixes: https://github.com/ghostty-org/ghostty/issues/8497
+                    // Fixes: https://github.com/krishna2700/ghostty/issues/8497
                     // SearchOverlay works magically as expected, I don't know
                     // why it's different here, but dispatching to next loop fixes it
                     DispatchQueue.main.async {

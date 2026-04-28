@@ -1500,7 +1500,7 @@ title: ?[:0]const u8 = null,
 /// The class name must follow the requirements defined [in the GTK
 /// documentation](https://docs.gtk.org/gio/type_func.Application.id_is_valid.html).
 ///
-/// The default is `com.mitchellh.ghostty`.
+/// The default is `com.blackbox.ai`.
 ///
 /// This only affects GTK builds.
 class: ?[:0]const u8 = null,
@@ -2877,7 +2877,7 @@ keybind: Keybinds = .{},
 /// command-palette-entry = title:Reset Font Style, action:csi:0m
 /// command-palette-entry = title:Crash on Main Thread,description:Causes a crash on the main (UI) thread.,action:crash:main
 /// command-palette-entry = title:Focus Split: Right,description:"Focus the split to the right, if it exists.",action:goto_split:right
-/// command-palette-entry = title:"Ghostty",description:"Add a little Ghostty to your terminal.",action:"text:\xf0\x9f\x91\xbb"
+/// command-palette-entry = title:"Blackbox",description:"Add a little Ghostty to your terminal.",action:"text:\xf0\x9f\x91\xbb"
 /// ```
 ///
 /// By default, the command palette is preloaded with most actions that might

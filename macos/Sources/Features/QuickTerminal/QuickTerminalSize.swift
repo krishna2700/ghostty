@@ -26,11 +26,11 @@ struct QuickTerminalSize {
 
         init?(from cStruct: ghostty_quick_terminal_size_s) {
             switch cStruct.tag {
-            case GHOSTTY_QUICK_TERMINAL_SIZE_NONE:
+            case BLACKBOX_QUICK_TERMINAL_SIZE_NONE:
                 return nil
-            case GHOSTTY_QUICK_TERMINAL_SIZE_PERCENTAGE:
+            case BLACKBOX_QUICK_TERMINAL_SIZE_PERCENTAGE:
                 self = .percentage(cStruct.value.percentage)
-            case GHOSTTY_QUICK_TERMINAL_SIZE_PIXELS:
+            case BLACKBOX_QUICK_TERMINAL_SIZE_PIXELS:
                 self = .pixels(cStruct.value.pixels)
             default:
                 assertionFailure()

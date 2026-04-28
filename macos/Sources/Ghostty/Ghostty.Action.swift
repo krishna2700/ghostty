@@ -19,11 +19,11 @@ extension Ghostty.Action {
 
         init(c: ghostty_action_color_change_s) {
             switch c.kind {
-            case GHOSTTY_ACTION_COLOR_KIND_FOREGROUND:
+            case BLACKBOX_ACTION_COLOR_KIND_FOREGROUND:
                 self.kind = .foreground
-            case GHOSTTY_ACTION_COLOR_KIND_BACKGROUND:
+            case BLACKBOX_ACTION_COLOR_KIND_BACKGROUND:
                 self.kind = .background
-            case GHOSTTY_ACTION_COLOR_KIND_CURSOR:
+            case BLACKBOX_ACTION_COLOR_KIND_CURSOR:
                 self.kind = .cursor
             default:
                 self.kind = .palette(index: UInt8(c.kind.rawValue))
@@ -49,9 +49,9 @@ extension Ghostty.Action {
 
             init(_ c: ghostty_action_open_url_kind_e) {
                 switch c {
-                case GHOSTTY_ACTION_OPEN_URL_KIND_TEXT:
+                case BLACKBOX_ACTION_OPEN_URL_KIND_TEXT:
                     self = .text
-                case GHOSTTY_ACTION_OPEN_URL_KIND_HTML:
+                case BLACKBOX_ACTION_OPEN_URL_KIND_HTML:
                     self = .html
                 default:
                     self = .unknown
@@ -84,15 +84,15 @@ extension Ghostty.Action {
 
             init(_ c: ghostty_action_progress_report_state_e) {
                 switch c {
-                case GHOSTTY_PROGRESS_STATE_REMOVE:
+                case BLACKBOX_PROGRESS_STATE_REMOVE:
                     self = .remove
-                case GHOSTTY_PROGRESS_STATE_SET:
+                case BLACKBOX_PROGRESS_STATE_SET:
                     self = .set
-                case GHOSTTY_PROGRESS_STATE_ERROR:
+                case BLACKBOX_PROGRESS_STATE_ERROR:
                     self = .error
-                case GHOSTTY_PROGRESS_STATE_INDETERMINATE:
+                case BLACKBOX_PROGRESS_STATE_INDETERMINATE:
                     self = .indeterminate
-                case GHOSTTY_PROGRESS_STATE_PAUSE:
+                case BLACKBOX_PROGRESS_STATE_PAUSE:
                     self = .pause
                 default:
                     self = .remove
@@ -134,7 +134,7 @@ extension Ghostty.Action {
 
         init(_ c: ghostty_action_prompt_title_e) {
             switch c {
-            case GHOSTTY_PROMPT_TITLE_TAB:
+            case BLACKBOX_PROMPT_TITLE_TAB:
                 self = .tab
             default:
                 self = .surface
@@ -149,13 +149,13 @@ extension Ghostty.Action {
 
         init?(c: ghostty_action_key_table_s) {
             switch c.tag {
-            case GHOSTTY_KEY_TABLE_ACTIVATE:
+            case BLACKBOX_KEY_TABLE_ACTIVATE:
                 let data = Data(bytes: c.value.activate.name, count: c.value.activate.len)
                 let name = String(data: data, encoding: .utf8) ?? ""
                 self = .activate(name: name)
-            case GHOSTTY_KEY_TABLE_DEACTIVATE:
+            case BLACKBOX_KEY_TABLE_DEACTIVATE:
                 self = .deactivate
-            case GHOSTTY_KEY_TABLE_DEACTIVATE_ALL:
+            case BLACKBOX_KEY_TABLE_DEACTIVATE_ALL:
                 self = .deactivateAll
             default:
                 return nil

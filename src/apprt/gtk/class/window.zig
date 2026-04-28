@@ -1743,8 +1743,8 @@ pub const Window = extern struct {
         _: ?*glib.Variant,
         self: *Self,
     ) callconv(.c) void {
-        const name = "Ghostty";
-        const icon = "com.mitchellh.ghostty";
+        const name = "Blackbox";
+        const icon = "com.blackbox.ai";
         const website = "https://ghostty.org";
 
         if (adw_version.supportsDialogs()) {

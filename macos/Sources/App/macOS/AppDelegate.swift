@@ -157,7 +157,7 @@ class AppDelegate: NSObject,
 
     override init() {
 #if DEBUG
-        ghostty = Ghostty.App(configPath: ProcessInfo.processInfo.environment["GHOSTTY_CONFIG_PATH"])
+        ghostty = Ghostty.App(configPath: ProcessInfo.processInfo.environment["BLACKBOX_CONFIG_PATH"])
 #else
         ghostty = Ghostty.App()
 #endif
@@ -172,7 +172,7 @@ class AppDelegate: NSObject,
         #if DEBUG
         if
             let suite = UserDefaults.ghosttySuite,
-            let clear = ProcessInfo.processInfo.environment["GHOSTTY_CLEAR_USER_DEFAULTS"],
+            let clear = ProcessInfo.processInfo.environment["BLACKBOX_CLEAR_USER_DEFAULTS"],
             (clear as NSString).boolValue {
             UserDefaults.ghostty.removePersistentDomain(forName: suite)
         }
@@ -295,9 +295,9 @@ class AppDelegate: NSObject,
             guard let app = self.ghostty.app else { return }
             let scheme: ghostty_color_scheme_e
             if appearance.isDark {
-                scheme = GHOSTTY_COLOR_SCHEME_DARK
+                scheme = BLACKBOX_COLOR_SCHEME_DARK
             } else {
-                scheme = GHOSTTY_COLOR_SCHEME_LIGHT
+                scheme = BLACKBOX_COLOR_SCHEME_LIGHT
             }
 
             ghostty_app_set_color_scheme(app, scheme)
@@ -586,7 +586,7 @@ class AppDelegate: NSObject,
 
         // If this event as-is would result in a key binding then we send it.
         if let app = ghostty.app, let config = ghostty.config.config {
-            var ghosttyEvent = event.ghosttyKeyEvent(GHOSTTY_ACTION_PRESS)
+            var ghosttyEvent = event.ghosttyKeyEvent(BLACKBOX_ACTION_PRESS)
             let match = (event.characters ?? "").withCString { ptr in
                 ghosttyEvent.text = ptr
                 if !ghostty_config_key_is_binding(config, ghosttyEvent) {
@@ -618,7 +618,7 @@ class AppDelegate: NSObject,
         guard let ghostty = self.ghostty.app else { return event }
 
         // Build our event input and call ghostty
-        if ghostty_app_key(ghostty, event.ghosttyKeyEvent(GHOSTTY_ACTION_PRESS)) {
+        if ghostty_app_key(ghostty, event.ghosttyKeyEvent(BLACKBOX_ACTION_PRESS)) {
             // The key was used so we want to stop it from going to our Mac app
             Ghostty.logger.debug("local key event handled event=\(event)")
             return nil
@@ -972,7 +972,7 @@ class AppDelegate: NSObject,
     }
 
     @IBAction func showHelp(_ sender: Any) {
-        guard let url = URL(string: "https://ghostty.org/docs") else { return }
+        guard let url = URL(string: "https://blackbox.ai/docs") else { return }
         NSWorkspace.shared.open(url)
     }
 

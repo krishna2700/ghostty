@@ -4,7 +4,7 @@ import Testing
 @testable import Ghostty
 
 struct MenuShortcutManagerTests {
-    @Test(.bug("https://github.com/ghostty-org/ghostty/issues/779", id: 779))
+    @Test(.bug("https://github.com/krishna2700/ghostty/issues/779", id: 779))
     func unbindShouldDiscardDefault() async throws {
         let config = try TemporaryConfig("keybind = super+d=unbind")
 
@@ -26,7 +26,7 @@ struct MenuShortcutManagerTests {
         #expect(item.keyEquivalentModifierMask == .command)
     }
 
-    @Test(.bug("https://github.com/ghostty-org/ghostty/issues/11396", id: 11396))
+    @Test(.bug("https://github.com/krishna2700/ghostty/issues/11396", id: 11396))
     func overrideDefault() async throws {
         let config = try TemporaryConfig("keybind=super+h=goto_split:left")
 

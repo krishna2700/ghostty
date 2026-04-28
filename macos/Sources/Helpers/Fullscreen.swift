@@ -195,7 +195,7 @@ class NonNativeFullscreen: FullscreenBase, FullscreenStyle {
 
         // Get our current first responder on this window. For non-native fullscreen
         // we have to restore this because for some reason the operations below
-        // lose it (see: https://github.com/ghostty-org/ghostty/issues/6999).
+        // lose it (see: https://github.com/krishna2700/ghostty/issues/6999).
         // I don't know the root cause here so if we can figure that out there may
         // be a nicer way than this.
         let firstResponder = window.firstResponder
@@ -233,7 +233,7 @@ class NonNativeFullscreen: FullscreenBase, FullscreenStyle {
         // Set frame to screen size, accounting for any elements such as the menu bar.
         // We do this async so that all the style edits above (title removal, dock
         // hide, menu hide, etc.) take effect. This fixes:
-        // https://github.com/ghostty-org/ghostty/issues/1996
+        // https://github.com/krishna2700/ghostty/issues/1996
         DispatchQueue.main.async {
             self.window.setFrame(self.fullscreenFrame(screen), display: true)
             if let firstResponder {

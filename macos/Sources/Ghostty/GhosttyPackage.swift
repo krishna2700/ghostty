@@ -13,10 +13,10 @@ extension ghostty_surface_t: @unchecked @retroactive Sendable {}
 
 extension Ghostty {
     // The user notification category identifier
-    static let userNotificationCategory = "com.mitchellh.ghostty.userNotification"
+    static let userNotificationCategory = "com.blackbox.ai.userNotification"
 
     // The user notification "Show" action
-    static let userNotificationActionShow = "com.mitchellh.ghostty.userNotification.Show"
+    static let userNotificationActionShow = "com.blackbox.ai.userNotification.Show"
 }
 
 // MARK: Build Info
@@ -51,7 +51,7 @@ extension Ghostty {
     /// Returns the mechanism that launched the app. This is based on an env var so
     /// its up to the env var being set in the correct circumstance.
     static var launchSource: LaunchSource {
-        guard let envValue = ProcessInfo.processInfo.environment["GHOSTTY_MAC_LAUNCH_SOURCE"] else {
+        guard let envValue = ProcessInfo.processInfo.environment["BLACKBOX_MAC_LAUNCH_SOURCE"] else {
             // We default to the CLI because the app bundle always sets the
             // source. If its unset we assume we're in a CLI environment.
             return .cli
@@ -92,13 +92,13 @@ extension Ghostty {
 
         static func from(_ c: ghostty_action_float_window_e) -> Self? {
             switch c {
-            case GHOSTTY_FLOAT_WINDOW_ON:
+            case BLACKBOX_FLOAT_WINDOW_ON:
                 return .on
 
-            case GHOSTTY_FLOAT_WINDOW_OFF:
+            case BLACKBOX_FLOAT_WINDOW_OFF:
                 return .off
 
-            case GHOSTTY_FLOAT_WINDOW_TOGGLE:
+            case BLACKBOX_FLOAT_WINDOW_TOGGLE:
                 return .toggle
 
             default:
@@ -114,13 +114,13 @@ extension Ghostty {
 
         static func from(_ c: ghostty_action_secure_input_e) -> Self? {
             switch c {
-            case GHOSTTY_SECURE_INPUT_ON:
+            case BLACKBOX_SECURE_INPUT_ON:
                 return .on
 
-            case GHOSTTY_SECURE_INPUT_OFF:
+            case BLACKBOX_SECURE_INPUT_OFF:
                 return .off
 
-            case GHOSTTY_SECURE_INPUT_TOGGLE:
+            case BLACKBOX_SECURE_INPUT_TOGGLE:
                 return .toggle
 
             default:
@@ -136,22 +136,22 @@ extension Ghostty {
         /// Initialize from a Ghostty API enum.
         static func from(direction: ghostty_action_goto_split_e) -> Self? {
             switch direction {
-            case GHOSTTY_GOTO_SPLIT_PREVIOUS:
+            case BLACKBOX_GOTO_SPLIT_PREVIOUS:
                 return .previous
 
-            case GHOSTTY_GOTO_SPLIT_NEXT:
+            case BLACKBOX_GOTO_SPLIT_NEXT:
                 return .next
 
-            case GHOSTTY_GOTO_SPLIT_UP:
+            case BLACKBOX_GOTO_SPLIT_UP:
                 return .up
 
-            case GHOSTTY_GOTO_SPLIT_DOWN:
+            case BLACKBOX_GOTO_SPLIT_DOWN:
                 return .down
 
-            case GHOSTTY_GOTO_SPLIT_LEFT:
+            case BLACKBOX_GOTO_SPLIT_LEFT:
                 return .left
 
-            case GHOSTTY_GOTO_SPLIT_RIGHT:
+            case BLACKBOX_GOTO_SPLIT_RIGHT:
                 return .right
 
             default:
@@ -162,22 +162,22 @@ extension Ghostty {
         func toNative() -> ghostty_action_goto_split_e {
             switch self {
             case .previous:
-                return GHOSTTY_GOTO_SPLIT_PREVIOUS
+                return BLACKBOX_GOTO_SPLIT_PREVIOUS
 
             case .next:
-                return GHOSTTY_GOTO_SPLIT_NEXT
+                return BLACKBOX_GOTO_SPLIT_NEXT
 
             case .up:
-                return GHOSTTY_GOTO_SPLIT_UP
+                return BLACKBOX_GOTO_SPLIT_UP
 
             case .down:
-                return GHOSTTY_GOTO_SPLIT_DOWN
+                return BLACKBOX_GOTO_SPLIT_DOWN
 
             case .left:
-                return GHOSTTY_GOTO_SPLIT_LEFT
+                return BLACKBOX_GOTO_SPLIT_LEFT
 
             case .right:
-                return GHOSTTY_GOTO_SPLIT_RIGHT
+                return BLACKBOX_GOTO_SPLIT_RIGHT
             }
         }
     }
@@ -188,13 +188,13 @@ extension Ghostty {
 
         static func from(direction: ghostty_action_resize_split_direction_e) -> Self? {
             switch direction {
-            case GHOSTTY_RESIZE_SPLIT_UP:
+            case BLACKBOX_RESIZE_SPLIT_UP:
                 return .up
-            case GHOSTTY_RESIZE_SPLIT_DOWN:
+            case BLACKBOX_RESIZE_SPLIT_DOWN:
                 return .down
-            case GHOSTTY_RESIZE_SPLIT_LEFT:
+            case BLACKBOX_RESIZE_SPLIT_LEFT:
                 return .left
-            case GHOSTTY_RESIZE_SPLIT_RIGHT:
+            case BLACKBOX_RESIZE_SPLIT_RIGHT:
                 return .right
             default:
                 return nil
@@ -204,13 +204,13 @@ extension Ghostty {
         func toNative() -> ghostty_action_resize_split_direction_e {
             switch self {
             case .up:
-                return GHOSTTY_RESIZE_SPLIT_UP
+                return BLACKBOX_RESIZE_SPLIT_UP
             case .down:
-                return GHOSTTY_RESIZE_SPLIT_DOWN
+                return BLACKBOX_RESIZE_SPLIT_DOWN
             case .left:
-                return GHOSTTY_RESIZE_SPLIT_LEFT
+                return BLACKBOX_RESIZE_SPLIT_LEFT
             case .right:
-                return GHOSTTY_RESIZE_SPLIT_RIGHT
+                return BLACKBOX_RESIZE_SPLIT_RIGHT
             }
         }
     }
@@ -279,11 +279,11 @@ extension Ghostty {
 
         static func from(request: ghostty_clipboard_request_e) -> ClipboardRequest? {
             switch request {
-            case GHOSTTY_CLIPBOARD_REQUEST_PASTE:
+            case BLACKBOX_CLIPBOARD_REQUEST_PASTE:
                 return .paste
-            case GHOSTTY_CLIPBOARD_REQUEST_OSC_52_READ:
+            case BLACKBOX_CLIPBOARD_REQUEST_OSC_52_READ:
                 return .osc_52_read
-            case GHOSTTY_CLIPBOARD_REQUEST_OSC_52_WRITE:
+            case BLACKBOX_CLIPBOARD_REQUEST_OSC_52_WRITE:
                 return .osc_52_write(nil)
             default:
                 return nil
@@ -331,121 +331,121 @@ extension Ghostty {
 
 extension Notification.Name {
     /// Configuration change. If the object is nil then it is app-wide. Otherwise its surface-specific.
-    static let ghosttyConfigDidChange = Notification.Name("com.mitchellh.ghostty.configDidChange")
+    static let ghosttyConfigDidChange = Notification.Name("com.blackbox.ai.configDidChange")
     static let GhosttyConfigChangeKey = ghosttyConfigDidChange.rawValue
 
     /// Color change. Object is the surface changing.
-    static let ghosttyColorDidChange = Notification.Name("com.mitchellh.ghostty.ghosttyColorDidChange")
+    static let ghosttyColorDidChange = Notification.Name("com.blackbox.ai.ghosttyColorDidChange")
     static let GhosttyColorChangeKey = ghosttyColorDidChange.rawValue
 
     /// Goto tab. Has tab index in the userinfo.
-    static let ghosttyMoveTab = Notification.Name("com.mitchellh.ghostty.moveTab")
+    static let ghosttyMoveTab = Notification.Name("com.blackbox.ai.moveTab")
     static let GhosttyMoveTabKey = ghosttyMoveTab.rawValue
 
     /// Close tab
-    static let ghosttyCloseTab = Notification.Name("com.mitchellh.ghostty.closeTab")
+    static let ghosttyCloseTab = Notification.Name("com.blackbox.ai.closeTab")
 
     /// Close other tabs
-    static let ghosttyCloseOtherTabs = Notification.Name("com.mitchellh.ghostty.closeOtherTabs")
+    static let ghosttyCloseOtherTabs = Notification.Name("com.blackbox.ai.closeOtherTabs")
 
     /// Close tabs to the right of the focused tab
-    static let ghosttyCloseTabsOnTheRight = Notification.Name("com.mitchellh.ghostty.closeTabsOnTheRight")
+    static let ghosttyCloseTabsOnTheRight = Notification.Name("com.blackbox.ai.closeTabsOnTheRight")
 
     /// Close window
-    static let ghosttyCloseWindow = Notification.Name("com.mitchellh.ghostty.closeWindow")
+    static let ghosttyCloseWindow = Notification.Name("com.blackbox.ai.closeWindow")
 
     /// Resize the window to a default size.
-    static let ghosttyResetWindowSize = Notification.Name("com.mitchellh.ghostty.resetWindowSize")
+    static let ghosttyResetWindowSize = Notification.Name("com.blackbox.ai.resetWindowSize")
 
     /// Ring the bell
-    static let ghosttyBellDidRing = Notification.Name("com.mitchellh.ghostty.ghosttyBellDidRing")
+    static let ghosttyBellDidRing = Notification.Name("com.blackbox.ai.ghosttyBellDidRing")
 
     /// Readonly mode changed
-    static let ghosttyDidChangeReadonly = Notification.Name("com.mitchellh.ghostty.didChangeReadonly")
+    static let ghosttyDidChangeReadonly = Notification.Name("com.blackbox.ai.didChangeReadonly")
     static let ReadonlyKey = ghosttyDidChangeReadonly.rawValue + ".readonly"
-    static let ghosttyCommandPaletteDidToggle = Notification.Name("com.mitchellh.ghostty.commandPaletteDidToggle")
+    static let ghosttyCommandPaletteDidToggle = Notification.Name("com.blackbox.ai.commandPaletteDidToggle")
 
     /// Toggle maximize of current window
-    static let ghosttyMaximizeDidToggle = Notification.Name("com.mitchellh.ghostty.maximizeDidToggle")
+    static let ghosttyMaximizeDidToggle = Notification.Name("com.blackbox.ai.maximizeDidToggle")
 
     /// Notification sent when scrollbar updates
-    static let ghosttyDidUpdateScrollbar = Notification.Name("com.mitchellh.ghostty.didUpdateScrollbar")
+    static let ghosttyDidUpdateScrollbar = Notification.Name("com.blackbox.ai.didUpdateScrollbar")
     static let ScrollbarKey = ghosttyDidUpdateScrollbar.rawValue + ".scrollbar"
 
     /// Focus the search field
-    static let ghosttySearchFocus = Notification.Name("com.mitchellh.ghostty.searchFocus")
+    static let ghosttySearchFocus = Notification.Name("com.blackbox.ai.searchFocus")
 }
 
 // NOTE: I am moving all of these to Notification.Name extensions over time. This
 // namespace was the old namespace.
 extension Ghostty.Notification {
     /// Used to pass a configuration along when creating a new tab/window/split.
-    static let NewSurfaceConfigKey = "com.mitchellh.ghostty.newSurfaceConfig"
+    static let NewSurfaceConfigKey = "com.blackbox.ai.newSurfaceConfig"
 
     /// Posted when a new split is requested. The sending object will be the surface that had focus. The
     /// userdata has one key "direction" with the direction to split to.
-    static let ghosttyNewSplit = Notification.Name("com.mitchellh.ghostty.newSplit")
+    static let ghosttyNewSplit = Notification.Name("com.blackbox.ai.newSplit")
 
     /// Close the calling surface.
-    static let ghosttyCloseSurface = Notification.Name("com.mitchellh.ghostty.closeSurface")
+    static let ghosttyCloseSurface = Notification.Name("com.blackbox.ai.closeSurface")
 
     /// Focus previous/next split. Has a SplitFocusDirection in the userinfo.
-    static let ghosttyFocusSplit = Notification.Name("com.mitchellh.ghostty.focusSplit")
+    static let ghosttyFocusSplit = Notification.Name("com.blackbox.ai.focusSplit")
     static let SplitDirectionKey = ghosttyFocusSplit.rawValue
 
     /// Goto tab. Has tab index in the userinfo.
-    static let ghosttyGotoTab = Notification.Name("com.mitchellh.ghostty.gotoTab")
+    static let ghosttyGotoTab = Notification.Name("com.blackbox.ai.gotoTab")
     static let GotoTabKey = ghosttyGotoTab.rawValue
 
     /// New tab. Has base surface config requested in userinfo.
-    static let ghosttyNewTab = Notification.Name("com.mitchellh.ghostty.newTab")
+    static let ghosttyNewTab = Notification.Name("com.blackbox.ai.newTab")
 
     /// New window. Has base surface config requested in userinfo.
-    static let ghosttyNewWindow = Notification.Name("com.mitchellh.ghostty.newWindow")
+    static let ghosttyNewWindow = Notification.Name("com.blackbox.ai.newWindow")
 
     /// Present terminal. Bring the surface's window to focus without activating the app.
-    static let ghosttyPresentTerminal = Notification.Name("com.mitchellh.ghostty.presentTerminal")
+    static let ghosttyPresentTerminal = Notification.Name("com.blackbox.ai.presentTerminal")
 
     /// Toggle fullscreen of current window
-    static let ghosttyToggleFullscreen = Notification.Name("com.mitchellh.ghostty.toggleFullscreen")
+    static let ghosttyToggleFullscreen = Notification.Name("com.blackbox.ai.toggleFullscreen")
     static let FullscreenModeKey = ghosttyToggleFullscreen.rawValue
 
     /// Notification sent to toggle split maximize/unmaximize.
-    static let didToggleSplitZoom = Notification.Name("com.mitchellh.ghostty.didToggleSplitZoom")
+    static let didToggleSplitZoom = Notification.Name("com.blackbox.ai.didToggleSplitZoom")
 
     /// Notification
-    static let didReceiveInitialWindowFrame = Notification.Name("com.mitchellh.ghostty.didReceiveInitialWindowFrame")
-    static let FrameKey = "com.mitchellh.ghostty.frame"
+    static let didReceiveInitialWindowFrame = Notification.Name("com.blackbox.ai.didReceiveInitialWindowFrame")
+    static let FrameKey = "com.blackbox.ai.frame"
 
     /// Notification to render the inspector for a surface
-    static let inspectorNeedsDisplay = Notification.Name("com.mitchellh.ghostty.inspectorNeedsDisplay")
+    static let inspectorNeedsDisplay = Notification.Name("com.blackbox.ai.inspectorNeedsDisplay")
 
     /// Notification to show/hide the inspector
-    static let didControlInspector = Notification.Name("com.mitchellh.ghostty.didControlInspector")
+    static let didControlInspector = Notification.Name("com.blackbox.ai.didControlInspector")
 
-    static let confirmClipboard = Notification.Name("com.mitchellh.ghostty.confirmClipboard")
+    static let confirmClipboard = Notification.Name("com.blackbox.ai.confirmClipboard")
     static let ConfirmClipboardStrKey = confirmClipboard.rawValue + ".str"
     static let ConfirmClipboardStateKey = confirmClipboard.rawValue + ".state"
     static let ConfirmClipboardRequestKey = confirmClipboard.rawValue + ".request"
 
     /// Notification sent to the active split view to resize the split.
-    static let didResizeSplit = Notification.Name("com.mitchellh.ghostty.didResizeSplit")
+    static let didResizeSplit = Notification.Name("com.blackbox.ai.didResizeSplit")
     static let ResizeSplitDirectionKey = didResizeSplit.rawValue + ".direction"
     static let ResizeSplitAmountKey = didResizeSplit.rawValue + ".amount"
 
     /// Notification sent to the split root to equalize split sizes
-    static let didEqualizeSplits = Notification.Name("com.mitchellh.ghostty.didEqualizeSplits")
+    static let didEqualizeSplits = Notification.Name("com.blackbox.ai.didEqualizeSplits")
 
     /// Notification that renderer health changed
-    static let didUpdateRendererHealth = Notification.Name("com.mitchellh.ghostty.didUpdateRendererHealth")
+    static let didUpdateRendererHealth = Notification.Name("com.blackbox.ai.didUpdateRendererHealth")
 
     /// Notifications related to key sequences
-    static let didContinueKeySequence = Notification.Name("com.mitchellh.ghostty.didContinueKeySequence")
-    static let didEndKeySequence = Notification.Name("com.mitchellh.ghostty.didEndKeySequence")
+    static let didContinueKeySequence = Notification.Name("com.blackbox.ai.didContinueKeySequence")
+    static let didEndKeySequence = Notification.Name("com.blackbox.ai.didEndKeySequence")
     static let KeySequenceKey = didContinueKeySequence.rawValue + ".key"
 
     /// Notifications related to key tables
-    static let didChangeKeyTable = Notification.Name("com.mitchellh.ghostty.didChangeKeyTable")
+    static let didChangeKeyTable = Notification.Name("com.blackbox.ai.didChangeKeyTable")
     static let KeyTableKey = didChangeKeyTable.rawValue + ".action"
 }
 

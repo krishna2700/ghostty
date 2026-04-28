@@ -1,10 +1,10 @@
-# Ghostty shell integration
-export module ghostty {
+# Blackbox shell integration
+export module blackbox {
   def has_feature [feature: string] {
-    $feature in ($env.GHOSTTY_SHELL_FEATURES | default "" | split row ',')
+    $feature in ($env.BLACKBOX_SHELL_FEATURES | default "" | split row ',')
   }
 
-  # Wrap `ssh` with Ghostty TERMINFO support
+  # Wrap `ssh` with Blackbox TERMINFO support
   export def --wrapped ssh [...args] {
     mut ssh_env = {}
     mut ssh_opts = []
@@ -18,9 +18,9 @@ export module ghostty {
       ]
     }
 
-    # `ssh-terminfo`: auto-install xterm-ghostty terminfo on remote hosts
+    # `ssh-terminfo`: auto-install xterm-blackbox terminfo on remote hosts
     if (has_feature "ssh-terminfo") {
-      let ghostty = ($env.GHOSTTY_BIN_DIR? | default "") | path join "ghostty"
+      let blackbox = ($env.BLACKBOX_BIN_DIR? | default "") | path join "blackbox"
 
       let ssh_cfg = ^ssh -G ...$args
         | lines
@@ -31,22 +31,22 @@ export module ghostty {
         | default {user: $env.USER hostname: "localhost"}
       let ssh_id = $"($ssh_cfg.user)@($ssh_cfg.hostname)"
 
-      if (^$ghostty "+ssh-cache" $"--host=($ssh_id)" | complete | $in.exit_code == 0) {
-        $ssh_env.TERM = "xterm-ghostty"
+      if (^$blackbox "+ssh-cache" $"--host=($ssh_id)" | complete | $in.exit_code == 0) {
+        $ssh_env.TERM = "xterm-blackbox"
       } else {
         $ssh_env.TERM = "xterm-256color"
 
         let terminfo = try {
-          ^infocmp -0 -x xterm-ghostty
+          ^infocmp -0 -x xterm-blackbox
         } catch {
           print -e "infocmp failed, using xterm-256color"
         }
 
         if ($terminfo | is-not-empty) {
-          print $"Setting up xterm-ghostty terminfo on ($ssh_cfg.hostname)..."
+          print $"Setting up xterm-blackbox terminfo on ($ssh_cfg.hostname)..."
 
           let ctrl_path = (
-            mktemp -td $"ghostty-ssh-($ssh_cfg.user).XXXXXX"
+            mktemp -td $"blackbox-ssh-($ssh_cfg.user).XXXXXX"
             | path join "socket"
           )
 
@@ -57,14 +57,14 @@ export module ghostty {
           ] ++ $args
 
           $terminfo | ^ssh ...$remote_args '
-            infocmp xterm-ghostty >/dev/null 2>&1 && exit 0
+            infocmp xterm-blackbox >/dev/null 2>&1 && exit 0
             command -v tic >/dev/null 2>&1 || exit 1
             mkdir -p ~/.terminfo 2>/dev/null && tic -x - 2>/dev/null && exit 0
             exit 1'
           | complete
           | if $in.exit_code == 0 {
-            ^$ghostty "+ssh-cache" $"--add=($ssh_id)" e>| print -e
-            $ssh_env.TERM = "xterm-ghostty"
+            ^$blackbox "+ssh-cache" $"--add=($ssh_id)" e>| print -e
+            $ssh_env.TERM = "xterm-blackbox"
             $ssh_opts = ($ssh_opts ++ ["-o" $"ControlPath=($ctrl_path)"])
           } else {
             print -e "terminfo install failed, using xterm-256color"
@@ -79,7 +79,7 @@ export module ghostty {
     }
   }
 
-  # Wrap `sudo` to preserve Ghostty's TERMINFO environment variable
+  # Wrap `sudo` to preserve Blackbox's TERMINFO environment variable
   export def --wrapped sudo [...args] {
     mut sudo_args = $args
 
@@ -101,10 +101,10 @@ export module ghostty {
   }
 }
 
-# Clean up XDG_DATA_DIRS by removing GHOSTTY_SHELL_INTEGRATION_XDG_DIR
-if 'GHOSTTY_SHELL_INTEGRATION_XDG_DIR' in $env {
+# Clean up XDG_DATA_DIRS by removing BLACKBOX_SHELL_INTEGRATION_XDG_DIR
+if 'BLACKBOX_SHELL_INTEGRATION_XDG_DIR' in $env {
   if 'XDG_DATA_DIRS' in $env {
-    $env.XDG_DATA_DIRS = ($env.XDG_DATA_DIRS | str replace $"($env.GHOSTTY_SHELL_INTEGRATION_XDG_DIR):" "")
+    $env.XDG_DATA_DIRS = ($env.XDG_DATA_DIRS | str replace $"($env.BLACKBOX_SHELL_INTEGRATION_XDG_DIR):" "")
   }
-  hide-env GHOSTTY_SHELL_INTEGRATION_XDG_DIR
+  hide-env BLACKBOX_SHELL_INTEGRATION_XDG_DIR
 }

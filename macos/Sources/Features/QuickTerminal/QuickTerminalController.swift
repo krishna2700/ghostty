@@ -370,7 +370,7 @@ class QuickTerminalController: BaseTerminalController {
                 }
             } else {
                 var config = Ghostty.SurfaceConfiguration()
-                config.environmentVariables["GHOSTTY_QUICK_TERMINAL"] = "1"
+                config.environmentVariables["BLACKBOX_QUICK_TERMINAL"] = "1"
 
                 let view = Ghostty.SurfaceView(ghostty_app, baseConfig: config)
                 surfaceTree = SplitTree(view: view)
@@ -495,7 +495,7 @@ class QuickTerminalController: BaseTerminalController {
                     // This works around a really funky bug where if the terminal is
                     // shown on a screen that has no other Ghostty windows, it takes
                     // a few (variable) event loop ticks until we can actually focus it.
-                    // https://github.com/ghostty-org/ghostty/issues/2409
+                    // https://github.com/krishna2700/ghostty/issues/2409
                     //
                     // We wait one event loop tick to try it because under the happy
                     // path (we have windows on this screen) it takes one event loop

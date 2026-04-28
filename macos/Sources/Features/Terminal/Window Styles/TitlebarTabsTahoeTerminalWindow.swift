@@ -242,7 +242,7 @@ class TitlebarTabsTahoeTerminalWindow: TransparentTitlebarTerminalWindow, NSTool
         case .title:
             let item = NSToolbarItem(itemIdentifier: .title)
             item.view = ClickThroughHostingView(rootView: TitleItem(viewModel: viewModel))
-            // Fix: https://github.com/ghostty-org/ghostty/discussions/9027
+            // Fix: https://github.com/krishna2700/ghostty/discussions/9027
             item.view?.setContentCompressionResistancePriority(.required, for: .horizontal)
             item.visibilityPriority = .user
             item.isEnabled = false

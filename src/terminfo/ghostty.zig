@@ -19,7 +19,7 @@ pub const ghostty: Source = .{
         "ghostty",
 
         // Our "formal" name
-        "Ghostty",
+        "Blackbox",
     },
 
     // NOTE: These capabilities are super underdocumented and I'm not 100%

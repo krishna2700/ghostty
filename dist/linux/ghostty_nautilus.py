@@ -21,13 +21,13 @@ from pathlib import Path
 import gettext
 from gi.repository import Nautilus, GObject, Gio
 
-DOMAIN = "com.mitchellh.ghostty"
+DOMAIN = "com.blackbox.ai"
 locale_dir = Path(__file__).absolute().parents[2] / "locale"
 _ = gettext.translation(DOMAIN, locale_dir, fallback=True).gettext
 
-def open_in_ghostty_activated(_menu, paths):
+def open_in_blackbox_activated(_menu, paths):
     for path in paths:
-        cmd = ['ghostty', f'--working-directory={path}', '--gtk-single-instance=false']
+        cmd = ['blackbox', f'--working-directory={path}', '--gtk-single-instance=false']
         Gio.Subprocess.new(cmd, Gio.SubprocessFlags.NONE)
 
 
@@ -50,17 +50,17 @@ def get_paths_to_open(files):
 def get_items_for_files(name, files):
     paths = get_paths_to_open(files)
     if paths:
-        item = Nautilus.MenuItem(name=name, label=_('Open in Ghostty'),
-            icon='com.mitchellh.ghostty')
-        item.connect('activate', open_in_ghostty_activated, paths)
+        item = Nautilus.MenuItem(name=name, label=_('Open in Blackbox'),
+            icon='com.blackbox.ai')
+        item.connect('activate', open_in_blackbox_activated, paths)
         return [item]
     else:
         return []
 
 
-class GhosttyMenuProvider(GObject.GObject, Nautilus.MenuProvider):
+class BlackboxMenuProvider(GObject.GObject, Nautilus.MenuProvider):
     def get_file_items(self, files):
-        return get_items_for_files('GhosttyNautilus::open_in_ghostty', files)
+        return get_items_for_files('BlackboxNautilus::open_in_blackbox', files)
 
     def get_background_items(self, file):
-        return get_items_for_files('GhosttyNautilus::open_folder_in_ghostty', [file])
+        return get_items_for_files('BlackboxNautilus::open_folder_in_blackbox', [file])

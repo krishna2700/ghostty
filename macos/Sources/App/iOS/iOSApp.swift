@@ -6,7 +6,7 @@ struct Ghostty_iOSApp: App {
     @StateObject private var ghostty_app: Ghostty.App
 
     init() {
-        if ghostty_init(UInt(CommandLine.argc), CommandLine.unsafeArgv) != GHOSTTY_SUCCESS {
+        if ghostty_init(UInt(CommandLine.argc), CommandLine.unsafeArgv) != BLACKBOX_SUCCESS {
             preconditionFailure("Initialize ghostty backend failed")
         }
         _ghostty_app = StateObject(wrappedValue: Ghostty.App())
@@ -42,7 +42,7 @@ struct iOS_GhosttyInitView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(maxHeight: 96)
-            Text("Ghostty")
+            Text("Blackbox")
             Text("State: \(ghostty_app.readiness.rawValue)")
         }
         .padding()

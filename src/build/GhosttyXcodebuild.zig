@@ -49,7 +49,7 @@ pub fn init(
     };
 
     const env = try std.process.getEnvMap(b.allocator);
-    const app_path = b.fmt("macos/build/{s}/Ghostty.app", .{xc_config});
+    const app_path = b.fmt("macos/build/{s}/Blackbox.app", .{xc_config});
 
     // Our step to build the Ghostty macOS app.
     const build = build: {
@@ -66,7 +66,7 @@ pub fn init(
         step.addArgs(&.{
             "xcodebuild",
             "-target",
-            "Ghostty",
+            "Blackbox",
             "-configuration",
             xc_config,
         });
@@ -103,7 +103,7 @@ pub fn init(
             "xcodebuild",
             "test",
             "-scheme",
-            "Ghostty",
+            "Blackbox",
             "-skip-testing",
             "GhosttyUITests",
         });
@@ -139,11 +139,11 @@ pub fn init(
         disable_save_state.expectExitCode(0);
         disable_save_state.step.dependOn(&build.step);
 
-        const open = RunStep.create(b, "run Ghostty app");
+        const open = RunStep.create(b, "run Blackbox app");
         open.has_side_effects = true;
         open.cwd = b.path("");
         open.addArgs(&.{b.fmt(
-            "{s}/Contents/MacOS/ghostty",
+            "{s}/Contents/MacOS/blackbox",
             .{app_path},
         )});
 
@@ -156,7 +156,7 @@ pub fn init(
         open.setEnvironmentVariable("GHOSTTY_LOG", "stderr,macos");
 
         // Configure how we're launching
-        open.setEnvironmentVariable("GHOSTTY_MAC_LAUNCH_SOURCE", "zig_run");
+        open.setEnvironmentVariable("BLACKBOX_MAC_LAUNCH_SOURCE", "zig_run");
 
         if (b.args) |args| {
             open.addArgs(args);

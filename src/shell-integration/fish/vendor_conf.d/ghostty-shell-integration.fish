@@ -2,9 +2,9 @@
 # or all failure scenarios are handled, so that we never leave the shell in
 # a weird state. If you find a way to break this, please report a bug!
 
-function ghostty_restore_xdg_data_dir -d "restore the original XDG_DATA_DIR value"
+function blackbox_restore_xdg_data_dir -d "restore the original XDG_DATA_DIR value"
     # If we don't have our own data dir then we don't need to do anything.
-    if not set -q GHOSTTY_SHELL_INTEGRATION_XDG_DIR
+    if not set -q BLACKBOX_SHELL_INTEGRATION_XDG_DIR
         return
     end
 
@@ -17,7 +17,7 @@ function ghostty_restore_xdg_data_dir -d "restore the original XDG_DATA_DIR valu
     set --function --path xdg_data_dirs "$XDG_DATA_DIRS"
 
     # If our data dir is in the list then remove it.
-    if set --function index (contains --index "$GHOSTTY_SHELL_INTEGRATION_XDG_DIR" $xdg_data_dirs)
+    if set --function index (contains --index "$BLACKBOX_SHELL_INTEGRATION_XDG_DIR" $xdg_data_dirs)
         set --erase --function xdg_data_dirs[$index]
     end
 
@@ -28,28 +28,28 @@ function ghostty_restore_xdg_data_dir -d "restore the original XDG_DATA_DIR valu
         set --erase --global XDG_DATA_DIRS
     end
 
-    set --erase GHOSTTY_SHELL_INTEGRATION_XDG_DIR
+    set --erase BLACKBOX_SHELL_INTEGRATION_XDG_DIR
 end
 
-function ghostty_exit -d "exit the shell integration setup"
-    functions -e ghostty_restore_xdg_data_dir
-    functions -e ghostty_exit
+function blackbox_exit -d "exit the shell integration setup"
+    functions -e blackbox_restore_xdg_data_dir
+    functions -e blackbox_exit
     exit 0
 end
 
 # We always try to restore the XDG data dir
-ghostty_restore_xdg_data_dir
+blackbox_restore_xdg_data_dir
 
 # If we aren't interactive or we've already run, don't run.
-status --is-interactive || ghostty_exit
+status --is-interactive || blackbox_exit
 
 # We do the full setup on the first prompt render. We do this so that other
 # shell integrations that setup the prompt and modify things are able to run
 # first. We want to run _last_.
-function __ghostty_setup --on-event fish_prompt -d "Setup ghostty integration"
-    functions -e __ghostty_setup
+function __blackbox_setup --on-event fish_prompt -d "Setup blackbox integration"
+    functions -e __blackbox_setup
 
-    set --local features (string split , $GHOSTTY_SHELL_FEATURES)
+    set --local features (string split , $BLACKBOX_SHELL_FEATURES)
 
     # Parse the fish version for feature detection.
     # Default to 0.0 if version is unavailable or malformed.
@@ -67,9 +67,9 @@ function __ghostty_setup --on-event fish_prompt -d "Setup ghostty integration"
 
     # Our OSC133A (prompt start) sequence. If we're using Fish >= 4.1
     # then it supports click_events so we enable that.
-    set -g __ghostty_prompt_start_mark "\e]133;A\a"
+    set -g __blackbox_prompt_start_mark "\e]133;A\a"
     if test "$fish_major" -gt 4; or test "$fish_major" -eq 4 -a "$fish_minor" -ge 1
-        set -g __ghostty_prompt_start_mark "\e]133;A;click_events=1\a"
+        set -g __blackbox_prompt_start_mark "\e]133;A;click_events=1\a"
     end
 
     if string match -q 'cursor*' -- $features
@@ -77,27 +77,27 @@ function __ghostty_setup --on-event fish_prompt -d "Setup ghostty integration"
         contains cursor:steady $features && set cursor 6  # steady bar
 
         # Change the cursor to a beam on prompt.
-        function __ghostty_set_cursor_beam --on-event fish_prompt -V cursor -d "Set cursor shape"
+        function __blackbox_set_cursor_beam --on-event fish_prompt -V cursor -d "Set cursor shape"
             if not functions -q fish_vi_cursor_handle
                 echo -en "\e[$cursor q"
             end
         end
-        function __ghostty_reset_cursor --on-event fish_preexec -d "Reset cursor shape"
+        function __blackbox_reset_cursor --on-event fish_preexec -d "Reset cursor shape"
             if not functions -q fish_vi_cursor_handle
                 echo -en "\e[0 q"
             end
         end
     end
 
-    # Add Ghostty binary to PATH if the path feature is enabled
-    if contains path $features; and test -n "$GHOSTTY_BIN_DIR"
-        fish_add_path --global --path --append "$GHOSTTY_BIN_DIR"
+    # Add Blackbox binary to PATH if the path feature is enabled
+    if contains path $features; and test -n "$BLACKBOX_BIN_DIR"
+        fish_add_path --global --path --append "$BLACKBOX_BIN_DIR"
     end
 
     # When using sudo shell integration feature, ensure $TERMINFO is set
     # and `sudo` is not already a function or alias
     if contains sudo $features; and test -n "$TERMINFO"; and test file = (type -t sudo 2> /dev/null; or echo "x")
-        # Wrap `sudo` command to ensure Ghostty terminfo is preserved
+        # Wrap `sudo` command to ensure Blackbox terminfo is preserved
         function sudo -d "Wrap sudo to preserve terminfo"
             set --function sudo_has_sudoedit_flags no
             for arg in $argv
@@ -120,10 +120,10 @@ function __ghostty_setup --on-event fish_prompt -d "Setup ghostty integration"
     end
 
     # SSH Integration
-    set -l features (string split ',' -- "$GHOSTTY_SHELL_FEATURES")
+    set -l features (string split ',' -- "$BLACKBOX_SHELL_FEATURES")
     if contains ssh-env $features; or contains ssh-terminfo $features
-        function ssh --wraps=ssh --description "SSH wrapper with Ghostty integration"
-            set -l features (string split ',' -- "$GHOSTTY_SHELL_FEATURES")
+        function ssh --wraps=ssh --description "SSH wrapper with Blackbox integration"
+            set -l features (string split ',' -- "$BLACKBOX_SHELL_FEATURES")
             set -l ssh_term xterm-256color
             set -l ssh_opts
 
@@ -156,33 +156,33 @@ function __ghostty_setup --on-event fish_prompt -d "Setup ghostty integration"
                     set -l ssh_target "$ssh_user@$ssh_hostname"
 
                     # Check if terminfo is already cached
-                    if test -x "$GHOSTTY_BIN_DIR/ghostty"; and "$GHOSTTY_BIN_DIR/ghostty" +ssh-cache --host="$ssh_target" >/dev/null 2>&1
-                        set ssh_term xterm-ghostty
+                    if test -x "$BLACKBOX_BIN_DIR/blackbox"; and "$BLACKBOX_BIN_DIR/blackbox" +ssh-cache --host="$ssh_target" >/dev/null 2>&1
+                        set ssh_term xterm-blackbox
                     else if command -q infocmp
                         set -l ssh_terminfo
                         set -l ssh_cpath_dir
                         set -l ssh_cpath
 
-                        set ssh_terminfo "$(infocmp -0 -x xterm-ghostty 2>/dev/null)"
+                        set ssh_terminfo "$(infocmp -0 -x xterm-blackbox 2>/dev/null)"
 
                         if test -n "$ssh_terminfo"
-                            echo "Setting up xterm-ghostty terminfo on $ssh_hostname..." >&2
+                            echo "Setting up xterm-blackbox terminfo on $ssh_hostname..." >&2
 
-                            set ssh_cpath_dir (mktemp -d "/tmp/ghostty-ssh-$ssh_user.XXXXXX" 2>/dev/null; or echo "/tmp/ghostty-ssh-$ssh_user."(random))
+                            set ssh_cpath_dir (mktemp -d "/tmp/blackbox-ssh-$ssh_user.XXXXXX" 2>/dev/null; or echo "/tmp/blackbox-ssh-$ssh_user."(random))
                             set ssh_cpath "$ssh_cpath_dir/socket"
 
                             if echo "$ssh_terminfo" | command ssh $ssh_opts -o ControlMaster=yes -o ControlPath="$ssh_cpath" -o ControlPersist=60s $argv '
-                                infocmp xterm-ghostty >/dev/null 2>&1 && exit 0
+                                infocmp xterm-blackbox >/dev/null 2>&1 && exit 0
                                 command -v tic >/dev/null 2>&1 || exit 1
                                 mkdir -p ~/.terminfo 2>/dev/null && tic -x - 2>/dev/null && exit 0
                                 exit 1
                             ' 2>/dev/null
-                                set ssh_term xterm-ghostty
+                                set ssh_term xterm-blackbox
                                 set -a ssh_opts -o "ControlPath=$ssh_cpath"
 
                                 # Cache successful installation
-                                if test -x "$GHOSTTY_BIN_DIR/ghostty"
-                                    "$GHOSTTY_BIN_DIR/ghostty" +ssh-cache --add="$ssh_target" >/dev/null 2>&1; or true
+                                if test -x "$BLACKBOX_BIN_DIR/blackbox"
+                                    "$BLACKBOX_BIN_DIR/blackbox" +ssh-cache --add="$ssh_target" >/dev/null 2>&1; or true
                                 end
                             else
                                 echo "Warning: Failed to install terminfo." >&2
@@ -191,7 +191,7 @@ function __ghostty_setup --on-event fish_prompt -d "Setup ghostty integration"
                             echo "Warning: Could not generate terminfo data." >&2
                         end
                     else
-                        echo "Warning: ghostty command not available for cache management." >&2
+                        echo "Warning: blackbox command not available for cache management." >&2
                     end
                 end
             end
@@ -202,23 +202,23 @@ function __ghostty_setup --on-event fish_prompt -d "Setup ghostty integration"
     end
 
     # Setup prompt marking
-    function __ghostty_mark_prompt_start --on-event fish_prompt --on-event fish_posterror
+    function __blackbox_mark_prompt_start --on-event fish_prompt --on-event fish_posterror
         # If we never got the output end event, then we need to send it now.
-        if test "$__ghostty_prompt_state" != prompt-start
+        if test "$__blackbox_prompt_state" != prompt-start
             echo -en "\e]133;D\a"
         end
 
-        set --global __ghostty_prompt_state prompt-start
-        echo -en $__ghostty_prompt_start_mark
+        set --global __blackbox_prompt_state prompt-start
+        echo -en $__blackbox_prompt_start_mark
     end
 
-    function __ghostty_mark_output_start --on-event fish_preexec
-        set --global __ghostty_prompt_state pre-exec
+    function __blackbox_mark_output_start --on-event fish_preexec
+        set --global __blackbox_prompt_state pre-exec
         echo -en "\e]133;C\a"
     end
 
-    function __ghostty_mark_output_end --on-event fish_postexec
-        set --global __ghostty_prompt_state post-exec
+    function __blackbox_mark_output_end --on-event fish_postexec
+        set --global __blackbox_prompt_state post-exec
         echo -en "\e]133;D;$status\a"
     end
 
@@ -231,15 +231,15 @@ function __ghostty_setup --on-event fish_prompt -d "Setup ghostty integration"
         printf \e\]7\;file://%s%s\a $hostname (string escape --style=url $PWD)
     end
 
-    # Enable fish to handle reflow because Ghostty clears the prompt on resize.
+    # Enable fish to handle reflow because Blackbox clears the prompt on resize.
     set --global fish_handle_reflow 1
 
     # Initial calls for first prompt
     if string match -q 'cursor*' -- $features
-        __ghostty_set_cursor_beam
+        __blackbox_set_cursor_beam
     end
-    __ghostty_mark_prompt_start
+    __blackbox_mark_prompt_start
     __update_cwd_osc
 end
 
-ghostty_exit
+blackbox_exit

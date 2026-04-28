@@ -39,7 +39,7 @@ final class GhosttyThemeTests: GhosttyCustomConfigCase {
         }
     }
 
-    /// https://github.com/ghostty-org/ghostty/issues/8282
+    /// https://github.com/krishna2700/ghostty/issues/8282
     @MainActor
     func testIssue8282() async throws {
         try updateConfig("title=\(windowTitle) \n theme=light:3024 Day,dark:3024 Night")

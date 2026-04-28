@@ -659,7 +659,7 @@ pub fn osVersionMin(tag: std.Target.Os.Tag) ?std.Target.Query.OsVersion {
 // `b.standardTargetOptions()` returns a more specific cpu like `apple_a15`.
 //
 // This is used to workaround compilation issues on macOS.
-// (see for example https://github.com/mitchellh/ghostty/issues/1640).
+// (see for example https://github.com/blackbox/ai/issues/1640).
 pub fn genericMacOSTarget(
     b: *std.Build,
     arch: ?std.Target.Cpu.Arch,

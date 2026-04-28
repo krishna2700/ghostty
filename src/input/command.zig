@@ -677,7 +677,7 @@ fn actionCommands(action: Action.Key) []const Command {
 
         .text => comptime &.{.{
             .action = .{ .text = "👻" },
-            .title = "Ghostty",
+            .title = "Blackbox",
             .description = "Put a little Ghostty in your terminal.",
         }},
 

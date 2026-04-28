@@ -2,21 +2,21 @@
   use platform
   use str
 
-  # Clean up XDG_DATA_DIRS by removing GHOSTTY_SHELL_INTEGRATION_XDG_DIR
-  if (and (has-env GHOSTTY_SHELL_INTEGRATION_XDG_DIR) (has-env XDG_DATA_DIRS)) {
-    set-env XDG_DATA_DIRS (str:replace $E:GHOSTTY_SHELL_INTEGRATION_XDG_DIR":" "" $E:XDG_DATA_DIRS)
-    unset-env GHOSTTY_SHELL_INTEGRATION_XDG_DIR
+  # Clean up XDG_DATA_DIRS by removing BLACKBOX_SHELL_INTEGRATION_XDG_DIR
+  if (and (has-env BLACKBOX_SHELL_INTEGRATION_XDG_DIR) (has-env XDG_DATA_DIRS)) {
+    set-env XDG_DATA_DIRS (str:replace $E:BLACKBOX_SHELL_INTEGRATION_XDG_DIR":" "" $E:XDG_DATA_DIRS)
+    unset-env BLACKBOX_SHELL_INTEGRATION_XDG_DIR
   }
 
   # List of enabled shell integration features
-  var features = [(str:split ',' $E:GHOSTTY_SHELL_FEATURES)]
+  var features = [(str:split ',' $E:BLACKBOX_SHELL_FEATURES)]
 
   # State tracking for semantic prompt sequences
   # Values: 'prompt-start', 'pre-exec', 'post-exec'
-  fn set-prompt-state {|new| set-env __ghostty_prompt_state $new }
+  fn set-prompt-state {|new| set-env __blackbox_prompt_state $new }
 
   fn mark-prompt-start {
-    if (not-eq $E:__ghostty_prompt_state 'prompt-start') {
+    if (not-eq $E:__blackbox_prompt_state 'prompt-start') {
       printf "\e]133;D;aid="$pid"\a"
     }
     set-prompt-state 'prompt-start'
@@ -108,33 +108,33 @@
       }
 
       if (not-eq $ssh-hostname "") {
-        var ghostty = $E:GHOSTTY_BIN_DIR/"ghostty"
+        var blackbox = $E:BLACKBOX_BIN_DIR/"blackbox"
         var ssh-target = $ssh-user"@"$ssh-hostname
 
         # Check if terminfo is already cached
-        if (bool ?($ghostty +ssh-cache --host=$ssh-target)) {
-          set ssh-term = "xterm-ghostty"
+        if (bool ?($blackbox +ssh-cache --host=$ssh-target)) {
+          set ssh-term = "xterm-blackbox"
         } elif (has-external infocmp) {
-          var ssh-terminfo = ((external infocmp) -0 -x xterm-ghostty 2>/dev/null | slurp)
+          var ssh-terminfo = ((external infocmp) -0 -x xterm-blackbox 2>/dev/null | slurp)
 
           if (not-eq $ssh-terminfo "") {
-            echo "Setting up xterm-ghostty terminfo on "$ssh-hostname"..." >&2
+            echo "Setting up xterm-blackbox terminfo on "$ssh-hostname"..." >&2
 
             use os
-            var ssh-cpath-dir = (os:temp-dir "ghostty-ssh-"$ssh-user".*")
+            var ssh-cpath-dir = (os:temp-dir "blackbox-ssh-"$ssh-user".*")
             var ssh-cpath = $ssh-cpath-dir"/socket"
 
             if (bool ?(echo $ssh-terminfo | (external ssh) $@ssh-opts -o ControlMaster=yes -o ControlPath=$ssh-cpath -o ControlPersist=60s $@args '
-                  infocmp xterm-ghostty >/dev/null 2>&1 && exit 0
+                  infocmp xterm-blackbox >/dev/null 2>&1 && exit 0
                   command -v tic >/dev/null 2>&1 || exit 1
                   mkdir -p ~/.terminfo 2>/dev/null && tic -x - 2>/dev/null && exit 0
                   exit 1
                 ' 2>/dev/null)) {
-              set ssh-term = "xterm-ghostty"
+              set ssh-term = "xterm-blackbox"
               set ssh-opts = (conj $ssh-opts -o ControlPath=$ssh-cpath)
 
               # Cache successful installation
-              $ghostty +ssh-cache --add=$ssh-target >/dev/null
+              $blackbox +ssh-cache --add=$ssh-target >/dev/null
             } else {
               echo "Warning: Failed to install terminfo." >&2
             }
@@ -142,7 +142,7 @@
             echo "Warning: Could not generate terminfo data." >&2
           }
         } else {
-          echo "Warning: ghostty command not available for cache management." >&2
+          echo "Warning: blackbox command not available for cache management." >&2
         }
       }
     }
@@ -160,7 +160,7 @@
   set edit:after-readline  = (conj $edit:after-readline $mark-output-start~)
   set edit:after-command   = (conj $edit:after-command $mark-output-end~)
 
-  if (str:contains $E:GHOSTTY_SHELL_FEATURES "cursor") {
+  if (str:contains $E:BLACKBOX_SHELL_FEATURES "cursor") {
     var cursor = "5"    # blinking bar
     if (has-value $features cursor:steady) {
       set cursor = "6"  # steady bar
@@ -171,15 +171,15 @@
     set edit:before-readline = (conj $edit:before-readline $beam~)
     set edit:after-readline  = (conj $edit:after-readline {|_| reset })
   }
-  if (and (has-value $features path) (has-env GHOSTTY_BIN_DIR)) {
-    if (not (has-value $paths $E:GHOSTTY_BIN_DIR)) {
-        set paths = [$@paths $E:GHOSTTY_BIN_DIR]
+  if (and (has-value $features path) (has-env BLACKBOX_BIN_DIR)) {
+    if (not (has-value $paths $E:BLACKBOX_BIN_DIR)) {
+        set paths = [$@paths $E:BLACKBOX_BIN_DIR]
     }
   }
   if (and (has-value $features sudo) (not-eq "" $E:TERMINFO) (has-external sudo)) {
     edit:add-var sudo~ $sudo-with-terminfo~
   }
-  if (and (str:contains $E:GHOSTTY_SHELL_FEATURES ssh-) (has-external ssh)) {
+  if (and (str:contains $E:BLACKBOX_SHELL_FEATURES ssh-) (has-external ssh)) {
     edit:add-var ssh~ $ssh-integration~
   }
 

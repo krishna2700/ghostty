@@ -20,16 +20,16 @@ if [[ "$-" != *i* ]]; then builtin return; fi
 
 # When automatic shell integration is active, we were started in POSIX
 # mode and need to manually recreate the bash startup sequence.
-if [ -n "$GHOSTTY_BASH_INJECT" ]; then
+if [ -n "$BLACKBOX_BASH_INJECT" ]; then
   # Store a temporary copy of our startup flags and unset these global
   # environment variables so we can safely handle reentrancy.
-  builtin declare __ghostty_bash_flags="$GHOSTTY_BASH_INJECT"
-  builtin unset ENV GHOSTTY_BASH_INJECT
+  builtin declare __blackbox_bash_flags="$BLACKBOX_BASH_INJECT"
+  builtin unset ENV BLACKBOX_BASH_INJECT
 
   # Restore an existing ENV that was replaced by the shell integration code.
-  if [[ -n "$GHOSTTY_BASH_ENV" ]]; then
-    builtin export ENV=$GHOSTTY_BASH_ENV
-    builtin unset GHOSTTY_BASH_ENV
+  if [[ -n "$BLACKBOX_BASH_ENV" ]]; then
+    builtin export ENV=$BLACKBOX_BASH_ENV
+    builtin unset BLACKBOX_BASH_ENV
   fi
 
   # Restore bash's default 'posix' behavior. Also reset 'inherit_errexit',
@@ -38,57 +38,57 @@ if [ -n "$GHOSTTY_BASH_INJECT" ]; then
   builtin shopt -u inherit_errexit 2>/dev/null
 
   # Unexport HISTFILE if it was set by the shell integration code.
-  if [[ -n "$GHOSTTY_BASH_UNEXPORT_HISTFILE" ]]; then
+  if [[ -n "$BLACKBOX_BASH_UNEXPORT_HISTFILE" ]]; then
     builtin export -n HISTFILE
-    builtin unset GHOSTTY_BASH_UNEXPORT_HISTFILE
+    builtin unset BLACKBOX_BASH_UNEXPORT_HISTFILE
   fi
 
   # Manually source the startup files. See INVOCATION in bash(1) and
   # run_startup_files() in shell.c in the Bash source code.
   if builtin shopt -q login_shell; then
-    if [[ $__ghostty_bash_flags != *"--noprofile"* ]]; then
+    if [[ $__blackbox_bash_flags != *"--noprofile"* ]]; then
       [ -r /etc/profile ] && builtin source "/etc/profile"
-      for __ghostty_rcfile in "$HOME/.bash_profile" "$HOME/.bash_login" "$HOME/.profile"; do
-        [ -r "$__ghostty_rcfile" ] && {
-          builtin source "$__ghostty_rcfile"
+      for __blackbox_rcfile in "$HOME/.bash_profile" "$HOME/.bash_login" "$HOME/.profile"; do
+        [ -r "$__blackbox_rcfile" ] && {
+          builtin source "$__blackbox_rcfile"
           break
         }
       done
     fi
   else
-    if [[ $__ghostty_bash_flags != *"--norc"* ]]; then
+    if [[ $__blackbox_bash_flags != *"--norc"* ]]; then
       # The location of the system bashrc is determined at bash build
       # time via -DSYS_BASHRC and can therefore vary across distros:
       #  Arch, Debian, Ubuntu use /etc/bash.bashrc
       #  Fedora uses /etc/bashrc sourced from ~/.bashrc instead of SYS_BASHRC
       #  Void Linux uses /etc/bash/bashrc
       #  Nixos uses /etc/bashrc
-      for __ghostty_rcfile in /etc/bash.bashrc /etc/bash/bashrc /etc/bashrc; do
-        [ -r "$__ghostty_rcfile" ] && {
-          builtin source "$__ghostty_rcfile"
+      for __blackbox_rcfile in /etc/bash.bashrc /etc/bash/bashrc /etc/bashrc; do
+        [ -r "$__blackbox_rcfile" ] && {
+          builtin source "$__blackbox_rcfile"
           break
         }
       done
-      if [[ -z "$GHOSTTY_BASH_RCFILE" ]]; then GHOSTTY_BASH_RCFILE="$HOME/.bashrc"; fi
-      [ -r "$GHOSTTY_BASH_RCFILE" ] && builtin source "$GHOSTTY_BASH_RCFILE"
+      if [[ -z "$BLACKBOX_BASH_RCFILE" ]]; then BLACKBOX_BASH_RCFILE="$HOME/.bashrc"; fi
+      [ -r "$BLACKBOX_BASH_RCFILE" ] && builtin source "$BLACKBOX_BASH_RCFILE"
     fi
   fi
 
-  builtin unset __ghostty_rcfile
-  builtin unset __ghostty_bash_flags
-  builtin unset GHOSTTY_BASH_RCFILE
+  builtin unset __blackbox_rcfile
+  builtin unset __blackbox_bash_flags
+  builtin unset BLACKBOX_BASH_RCFILE
 fi
 
-# Add Ghostty binary to PATH if the path feature is enabled
-if [[ "$GHOSTTY_SHELL_FEATURES" == *"path"* && -n "$GHOSTTY_BIN_DIR" ]]; then
-  if [[ ":$PATH:" != *":$GHOSTTY_BIN_DIR:"* ]]; then
-    export PATH="$PATH:$GHOSTTY_BIN_DIR"
+# Add Blackbox binary to PATH if the path feature is enabled
+if [[ "$BLACKBOX_SHELL_FEATURES" == *"path"* && -n "$BLACKBOX_BIN_DIR" ]]; then
+  if [[ ":$PATH:" != *":$BLACKBOX_BIN_DIR:"* ]]; then
+    export PATH="$PATH:$BLACKBOX_BIN_DIR"
   fi
 fi
 
 # Sudo
-if [[ "$GHOSTTY_SHELL_FEATURES" == *"sudo"* && -n "$TERMINFO" ]]; then
-  # Wrap `sudo` command to ensure Ghostty terminfo is preserved.
+if [[ "$BLACKBOX_SHELL_FEATURES" == *"sudo"* && -n "$TERMINFO" ]]; then
+  # Wrap `sudo` command to ensure Blackbox terminfo is preserved.
   #
   # This approach supports wrapping a `sudo` alias, but the alias definition
   # must come _after_ this function is defined. Otherwise, the alias expansion
@@ -115,19 +115,19 @@ if [[ "$GHOSTTY_SHELL_FEATURES" == *"sudo"* && -n "$TERMINFO" ]]; then
 fi
 
 # SSH Integration
-if [[ "$GHOSTTY_SHELL_FEATURES" == *ssh-* ]]; then
+if [[ "$BLACKBOX_SHELL_FEATURES" == *ssh-* ]]; then
   function ssh() {
     builtin local ssh_term ssh_opts
     ssh_term="xterm-256color"
     ssh_opts=()
 
     # Configure environment variables for remote session
-    if [[ "$GHOSTTY_SHELL_FEATURES" == *ssh-env* ]]; then
+    if [[ "$BLACKBOX_SHELL_FEATURES" == *ssh-env* ]]; then
       ssh_opts+=(-o "SendEnv COLORTERM TERM_PROGRAM TERM_PROGRAM_VERSION")
     fi
 
     # Install terminfo on remote host if needed
-    if [[ "$GHOSTTY_SHELL_FEATURES" == *ssh-terminfo* ]]; then
+    if [[ "$BLACKBOX_SHELL_FEATURES" == *ssh-terminfo* ]]; then
       builtin local ssh_user ssh_hostname
 
       while IFS=' ' read -r ssh_key ssh_value; do
@@ -142,30 +142,30 @@ if [[ "$GHOSTTY_SHELL_FEATURES" == *ssh-* ]]; then
         builtin local ssh_target="${ssh_user}@${ssh_hostname}"
 
         # Check if terminfo is already cached
-        if "$GHOSTTY_BIN_DIR/ghostty" +ssh-cache --host="$ssh_target" >/dev/null 2>&1; then
-          ssh_term="xterm-ghostty"
+        if "$BLACKBOX_BIN_DIR/blackbox" +ssh-cache --host="$ssh_target" >/dev/null 2>&1; then
+          ssh_term="xterm-blackbox"
         elif builtin command -v infocmp >/dev/null 2>&1; then
           builtin local ssh_terminfo ssh_cpath_dir ssh_cpath
 
-          ssh_terminfo=$(infocmp -0 -x xterm-ghostty 2>/dev/null)
+          ssh_terminfo=$(infocmp -0 -x xterm-blackbox 2>/dev/null)
 
           if [[ -n "$ssh_terminfo" ]]; then
-            builtin echo "Setting up xterm-ghostty terminfo on $ssh_hostname..." >&2
+            builtin echo "Setting up xterm-blackbox terminfo on $ssh_hostname..." >&2
 
-            ssh_cpath_dir=$(mktemp -d "/tmp/ghostty-ssh-$ssh_user.XXXXXX" 2>/dev/null) || ssh_cpath_dir="/tmp/ghostty-ssh-$ssh_user.$$"
+            ssh_cpath_dir=$(mktemp -d "/tmp/blackbox-ssh-$ssh_user.XXXXXX" 2>/dev/null) || ssh_cpath_dir="/tmp/blackbox-ssh-$ssh_user.$$"
             ssh_cpath="$ssh_cpath_dir/socket"
 
             if builtin echo "$ssh_terminfo" | builtin command ssh -o ControlMaster=yes -o ControlPath="$ssh_cpath" -o ControlPersist=60s "$@" '
-              infocmp xterm-ghostty >/dev/null 2>&1 && exit 0
+              infocmp xterm-blackbox >/dev/null 2>&1 && exit 0
               command -v tic >/dev/null 2>&1 || exit 1
               mkdir -p ~/.terminfo 2>/dev/null && tic -x - 2>/dev/null && exit 0
               exit 1
             ' 2>/dev/null; then
-              ssh_term="xterm-ghostty"
+              ssh_term="xterm-blackbox"
               ssh_opts+=(-o "ControlPath=$ssh_cpath")
 
               # Cache successful installation
-              "$GHOSTTY_BIN_DIR/ghostty" +ssh-cache --add="$ssh_target" >/dev/null 2>&1 || true
+              "$BLACKBOX_BIN_DIR/blackbox" +ssh-cache --add="$ssh_target" >/dev/null 2>&1 || true
             else
               builtin echo "Warning: Failed to install terminfo." >&2
             fi
@@ -173,7 +173,7 @@ if [[ "$GHOSTTY_SHELL_FEATURES" == *ssh-* ]]; then
             builtin echo "Warning: Could not generate terminfo data." >&2
           fi
         else
-          builtin echo "Warning: ghostty command not available for cache management." >&2
+          builtin echo "Warning: blackbox command not available for cache management." >&2
         fi
       fi
     fi
@@ -185,14 +185,14 @@ fi
 
 # This is set to 1 when we're executing a command so that we don't
 # send prompt marks multiple times.
-_ghostty_executing=""
-_ghostty_last_reported_cwd=""
+_blackbox_executing=""
+_blackbox_last_reported_cwd=""
 
-function __ghostty_precmd() {
+function __blackbox_precmd() {
   local ret="$?"
-  if test "$_ghostty_executing" != "0"; then
-    _GHOSTTY_SAVE_PS1="$PS1"
-    _GHOSTTY_SAVE_PS2="$PS2"
+  if test "$_blackbox_executing" != "0"; then
+    _BLACKBOX_SAVE_PS1="$PS1"
+    _BLACKBOX_SAVE_PS2="$PS2"
 
     # Use 133;P (not 133;A) inside PS1 to avoid fresh-line behavior on
     # readline redraws (e.g., vi mode switches, Ctrl-L). The initial
@@ -213,21 +213,21 @@ function __ghostty_precmd() {
     fi
 
     # Cursor
-    if [[ "$GHOSTTY_SHELL_FEATURES" == *"cursor"* ]]; then
+    if [[ "$BLACKBOX_SHELL_FEATURES" == *"cursor"* ]]; then
       builtin local cursor=5  # blinking bar
-      [[ "$GHOSTTY_SHELL_FEATURES" == *"cursor:steady"* ]] && cursor=6  # steady bar
+      [[ "$BLACKBOX_SHELL_FEATURES" == *"cursor:steady"* ]] && cursor=6  # steady bar
 
       [[ "$PS1" != *"\[\e[${cursor} q\]"* ]] && PS1=$PS1"\[\e[${cursor} q\]"
       [[ "$PS0" != *'\[\e[0 q\]'* ]] && PS0=$PS0'\[\e[0 q\]' # reset
     fi
 
     # Title (working directory)
-    if [[ "$GHOSTTY_SHELL_FEATURES" == *"title"* ]]; then
+    if [[ "$BLACKBOX_SHELL_FEATURES" == *"title"* ]]; then
       PS1=$PS1'\[\e]2;\w\a\]'
     fi
   fi
 
-  if test "$_ghostty_executing" != ""; then
+  if test "$_blackbox_executing" != ""; then
     # End of current command. Report its status.
     builtin printf "\e]133;D;%s;aid=%s\a" "$ret" "$BASHPID"
   fi
@@ -246,51 +246,51 @@ function __ghostty_precmd() {
   # unfortunately bash provides no hooks to detect cwd changes
   # in particular this means cwd reporting will not happen for a
   # command like cd /test && cat. PS0 is evaluated before cd is run.
-  if [[ "$_ghostty_last_reported_cwd" != "$PWD" ]]; then
-    _ghostty_last_reported_cwd="$PWD"
+  if [[ "$_blackbox_last_reported_cwd" != "$PWD" ]]; then
+    _blackbox_last_reported_cwd="$PWD"
     builtin printf "\e]7;kitty-shell-cwd://%s%s\a" "$HOSTNAME" "$PWD"
   fi
 
-  _ghostty_executing=0
+  _blackbox_executing=0
 }
 
-function __ghostty_preexec() {
+function __blackbox_preexec() {
   builtin local cmd="$1"
 
-  PS1="$_GHOSTTY_SAVE_PS1"
-  PS2="$_GHOSTTY_SAVE_PS2"
+  PS1="$_BLACKBOX_SAVE_PS1"
+  PS2="$_BLACKBOX_SAVE_PS2"
 
   # Title (current command)
-  if [[ -n $cmd && "$GHOSTTY_SHELL_FEATURES" == *"title"* ]]; then
+  if [[ -n $cmd && "$BLACKBOX_SHELL_FEATURES" == *"title"* ]]; then
     builtin printf "\e]2;%s\a" "${cmd//[[:cntrl:]]/}"
   fi
 
   # End of input, start of output.
   builtin printf "\e]133;C;\a"
-  _ghostty_executing=1
+  _blackbox_executing=1
 }
 
 if (( BASH_VERSINFO[0] > 4 || (BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] >= 4) )); then
-  __ghostty_preexec_hook() {
+  __blackbox_preexec_hook() {
     builtin local cmd
     cmd=$(LC_ALL=C HISTTIMEFORMAT='' builtin history 1)
     cmd="${cmd#*[[:digit:]][* ] }"  # remove leading history number
-    [[ -n "$cmd" ]] && __ghostty_preexec "$cmd"
+    [[ -n "$cmd" ]] && __blackbox_preexec "$cmd"
   }
 
-  __ghostty_hook() {
+  __blackbox_hook() {
     builtin local ret=$?
-    __ghostty_precmd "$ret"
+    __blackbox_precmd "$ret"
 
     # Append preexec hook to PS0 if not already present.
     # Use function substitution in 5.3+, otherwise command substitution.
-    if [[ "$PS0" != *"__ghostty_preexec_hook"* ]]; then
+    if [[ "$PS0" != *"__blackbox_preexec_hook"* ]]; then
       if (( BASH_VERSINFO[0] > 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 3) )); then
         # shellcheck disable=SC2016
-        PS0+='${ __ghostty_preexec_hook; }'
+        PS0+='${ __blackbox_preexec_hook; }'
       else
         # shellcheck disable=SC2016
-        PS0+='$(__ghostty_preexec_hook >/dev/tty)'
+        PS0+='$(__blackbox_preexec_hook >/dev/tty)'
       fi
     fi
   }
@@ -299,26 +299,26 @@ if (( BASH_VERSINFO[0] > 4 || (BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] >= 4) )
   #
   # The 2>/dev/null suppresses "command not found" in subshells that inherit
   # PROMPT_COMMAND without the function definition. This also silences any
-  # errors from inside __ghostty_hook itself, but those are all terminal escape
+  # errors from inside __blackbox_hook itself, but those are all terminal escape
   # sequences and non-actionable.
   #
   # shellcheck disable=SC2128,SC2178,SC2179
-  if [[ ";${PROMPT_COMMAND[*]:-};" != *";__ghostty_hook 2>/dev/null;"* ]]; then
+  if [[ ";${PROMPT_COMMAND[*]:-};" != *";__blackbox_hook 2>/dev/null;"* ]]; then
     if [[ -z "${PROMPT_COMMAND[*]}" ]]; then
       if (( BASH_VERSINFO[0] > 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 1) )); then
-        PROMPT_COMMAND=("__ghostty_hook 2>/dev/null")
+        PROMPT_COMMAND=("__blackbox_hook 2>/dev/null")
       else
-        PROMPT_COMMAND="__ghostty_hook 2>/dev/null"
+        PROMPT_COMMAND="__blackbox_hook 2>/dev/null"
       fi
     elif [[ $(builtin declare -p PROMPT_COMMAND 2>/dev/null) == "declare -a "* ]]; then
-      PROMPT_COMMAND+=("__ghostty_hook 2>/dev/null")
+      PROMPT_COMMAND+=("__blackbox_hook 2>/dev/null")
     else
       [[ "${PROMPT_COMMAND}" =~ (\;[[:space:]]*|$'\n')$ ]] || PROMPT_COMMAND+=";"
-      PROMPT_COMMAND+="__ghostty_hook 2>/dev/null"
+      PROMPT_COMMAND+="__blackbox_hook 2>/dev/null"
     fi
   fi
 else
   builtin source "$(dirname -- "${BASH_SOURCE[0]}")/bash-preexec.sh"
-  preexec_functions+=(__ghostty_preexec)
-  precmd_functions+=(__ghostty_precmd)
+  preexec_functions+=(__blackbox_preexec)
+  precmd_functions+=(__blackbox_precmd)
 fi

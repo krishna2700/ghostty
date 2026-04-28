@@ -176,7 +176,7 @@ test "xtgettcap map" {
         .names = &.{
             "ghostty",
             "xterm-ghostty",
-            "Ghostty",
+            "Blackbox",
         },
 
         .capabilities = &.{
@@ -217,7 +217,7 @@ test "encode" {
         .names = &.{
             "ghostty",
             "xterm-ghostty",
-            "Ghostty",
+            "Blackbox",
         },
 
         .capabilities = &.{

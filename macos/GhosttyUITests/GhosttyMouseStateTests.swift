@@ -8,7 +8,7 @@
 import XCTest
 
 final class GhosttyMouseStateTests: GhosttyCustomConfigCase {
-    // https://github.com/ghostty-org/ghostty/pull/11276
+    // https://github.com/krishna2700/ghostty/pull/11276
     @MainActor func testSelectionFocusChange() async throws {
         let app = XCUIApplication()
         app.activate()
