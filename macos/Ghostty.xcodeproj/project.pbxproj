@@ -12,7 +12,7 @@
 		552964E62B34A9B400030505 /* vim in Resources */ = {isa = PBXBuildFile; fileRef = 552964E52B34A9B400030505 /* vim */; };
 		819324582F24E78800A9ED8F /* DockTilePlugin.plugin in Copy DockTilePlugin */ = {isa = PBXBuildFile; fileRef = 8193244D2F24E6C000A9ED8F /* DockTilePlugin.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		819324642F24FF2100A9ED8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5B30538299BEAAB0047F10C /* Assets.xcassets */; };
-		8F3A9B4C2FA6B88000A18D13 /* Ghostty.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 8F3A9B4B2FA6B88000A18D13 /* Ghostty.sdef */; };
+		8F3A9B4C2FA6B88000A18D13 /* Blackbox.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 8F3A9B4B2FA6B88000A18D13 /* Blackbox.sdef */; };
 		9351BE8E3D22937F003B3499 /* nvim in Resources */ = {isa = PBXBuildFile; fileRef = 9351BE8E2D22937F003B3499 /* nvim */; };
 		A51BFC272B30F1B800E92F16 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = A51BFC262B30F1B800E92F16 /* Sparkle */; };
 		A53D0C8E2B53B0EA00305CE6 /* GhosttyKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5D495A1299BEC7E00DD1313 /* GhosttyKit.xcframework */; };
@@ -76,7 +76,7 @@
 		80B155F32F9E3FF90040F9D8 /* Ghostty.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ghostty.xctestplan; sourceTree = "<group>"; };
 		810ACC9F2E9D3301004F8F92 /* GhosttyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GhosttyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8193244D2F24E6C000A9ED8F /* DockTilePlugin.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockTilePlugin.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F3A9B4B2FA6B88000A18D13 /* Ghostty.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.sdef; path = Ghostty.sdef; sourceTree = "<group>"; };
+		8F3A9B4B2FA6B88000A18D13 /* Blackbox.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.sdef; path = Blackbox.sdef; sourceTree = "<group>"; };
 		9351BE8E2D22937F003B3499 /* nvim */ = {isa = PBXFileReference; lastKnownFileType = folder; name = nvim; path = "../zig-out/share/nvim"; sourceTree = "<group>"; };
 		A51BFC282B30F26D00E92F16 /* GhosttyDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GhosttyDebug.entitlements; sourceTree = "<group>"; };
 		A546F1132D7B68D7003B11A0 /* locale */ = {isa = PBXFileReference; lastKnownFileType = folder; name = locale; path = "../zig-out/share/locale"; sourceTree = "<group>"; };
@@ -340,7 +340,7 @@
 			children = (
 				80B155F32F9E3FF90040F9D8 /* Ghostty.xctestplan */,
 				A571AB1C2A206FC600248498 /* Ghostty-Info.plist */,
-				8F3A9B4B2FA6B88000A18D13 /* Ghostty.sdef */,
+				8F3A9B4B2FA6B88000A18D13 /* Blackbox.sdef */,
 				A5B30538299BEAAB0047F10C /* Assets.xcassets */,
 				A553F4122E06EB1600257779 /* Ghostty.icon */,
 				A5B3053D299BEAAB0047F10C /* Ghostty.entitlements */,
@@ -576,7 +576,7 @@
 				A553F4142E06EB1600257779 /* Ghostty.icon in Resources */,
 				29C15B1D2CDC3B2900520DD4 /* bat in Resources */,
 				A586167C2B7703CC009BDB1D /* fish in Resources */,
-				8F3A9B4C2FA6B88000A18D13 /* Ghostty.sdef in Resources */,
+				8F3A9B4C2FA6B88000A18D13 /* Blackbox.sdef in Resources */,
 				55154BE02B33911F001622DC /* ghostty in Resources */,
 				A546F1142D7B68D7003B11A0 /* locale in Resources */,
 				A5985CE62C33060F00C57AD3 /* man in Resources */,
@@ -754,7 +754,7 @@
 				GCC_OPTIMIZATION_LEVEL = fast;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Ghostty-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Ghostty;
+				INFOPLIST_KEY_CFBundleDisplayName = Blackbox;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "A program running within Ghostty would like to use AppleScript.";
 				INFOPLIST_KEY_NSAudioCaptureUsageDescription = "A program running within Ghostty would like to access your system's audio.";
@@ -781,7 +781,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1;
 				"OTHER_LDFLAGS[arch=*]" = "-lstdc++";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mitchellh.ghostty;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackbox.terminal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/App/macOS/ghostty-bridging-header.h";
@@ -800,7 +800,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mitchellh.GhosttyUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackbox.BlackboxUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -823,7 +823,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mitchellh.GhosttyUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackbox.BlackboxUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -846,7 +846,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mitchellh.GhosttyUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackbox.BlackboxUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -868,14 +868,14 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Ghostty Dock Tile Plugin";
+				INFOPLIST_KEY_CFBundleDisplayName = "Blackbox Dock Tile Plugin";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mitchellh.ghostty-dock-tile";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackbox.terminal-dock-tile";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -897,14 +897,14 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Ghostty Dock Tile Plugin";
+				INFOPLIST_KEY_CFBundleDisplayName = "Blackbox Dock Tile Plugin";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mitchellh.ghostty-dock-tile";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackbox.terminal-dock-tile";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -926,14 +926,14 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Ghostty Dock Tile Plugin";
+				INFOPLIST_KEY_CFBundleDisplayName = "Blackbox Dock Tile Plugin";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mitchellh.ghostty-dock-tile";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackbox.terminal-dock-tile";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -957,7 +957,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mitchellh.GhosttyTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackbox.BlackboxTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -981,7 +981,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mitchellh.GhosttyTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackbox.BlackboxTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -1004,7 +1004,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mitchellh.GhosttyTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackbox.BlackboxTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -1152,7 +1152,7 @@
 				EXECUTABLE_NAME = ghostty;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Ghostty-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Ghostty[DEBUG]";
+				INFOPLIST_KEY_CFBundleDisplayName = "Blackbox[DEBUG]";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "A program running within Ghostty would like to use AppleScript.";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "A program running within Ghostty would like to use Bluetooth.";
@@ -1178,7 +1178,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1;
 				"OTHER_LDFLAGS[arch=*]" = "-lstdc++";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mitchellh.ghostty.debug;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackbox.terminal.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/App/macOS/ghostty-bridging-header.h";
@@ -1207,7 +1207,7 @@
 				GCC_OPTIMIZATION_LEVEL = fast;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Ghostty-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Ghostty;
+				INFOPLIST_KEY_CFBundleDisplayName = Blackbox;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "A program running within Ghostty would like to use AppleScript.";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "A program running within Ghostty would like to use Bluetooth.";
@@ -1233,7 +1233,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1;
 				"OTHER_LDFLAGS[arch=*]" = "-lstdc++";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mitchellh.ghostty;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackbox.terminal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/App/macOS/ghostty-bridging-header.h";
@@ -1255,7 +1255,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Ghostty;
+				INFOPLIST_KEY_CFBundleDisplayName = Blackbox;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1270,7 +1270,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 0.1;
 				"OTHER_LDFLAGS[arch=*]" = "-lstdc++";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mitchellh.ghostty-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackbox.terminal-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -1294,7 +1294,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Ghostty;
+				INFOPLIST_KEY_CFBundleDisplayName = Blackbox;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1309,7 +1309,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 0.1;
 				"OTHER_LDFLAGS[arch=*]" = "-lstdc++";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mitchellh.ghostty-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackbox.terminal-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1333,7 +1333,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Ghostty;
+				INFOPLIST_KEY_CFBundleDisplayName = Blackbox;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1348,7 +1348,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 0.1;
 				"OTHER_LDFLAGS[arch=*]" = "-lstdc++";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mitchellh.ghostty-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackbox.terminal-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;

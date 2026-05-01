@@ -2,7 +2,7 @@ import AppKit
 
 extension UserDefaults {
     private static let customIconKeyOld = "CustomGhosttyIcon"
-    private static let customIconKeyNew = "CustomGhosttyIcon2"
+    private static let customIconKeyNew = "CustomBlackboxIcon"
 
     var appIcon: AppIcon? {
         get {

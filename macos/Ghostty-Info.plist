@@ -62,7 +62,7 @@
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>OSAScriptingDefinition</key>
-	<string>Ghostty.sdef</string>
+	<string>Blackbox.sdef</string>
 	<key>NSServices</key>
 	<array>
 		<dict>
@@ -112,9 +112,9 @@
 	<array>
 		<dict>
 			<key>UTTypeIdentifier</key>
-			<string>com.mitchellh.ghosttySurfaceId</string>
+			<string>com.blackbox.terminalSurfaceId</string>
 			<key>UTTypeDescription</key>
-			<string>Ghostty Surface Identifier</string>
+			<string>Blackbox Surface Identifier</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
