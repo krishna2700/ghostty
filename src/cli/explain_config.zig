@@ -11,12 +11,12 @@ const Pager = @import("Pager.zig");
 pub const Options = struct {
     /// The config option to explain. For example:
     ///
-    ///   ghostty +explain-config --option=font-size
+    ///   blackbox +explain-config --option=font-size
     option: ?[]const u8 = null,
 
     /// The keybind action to explain. For example:
     ///
-    ///   ghostty +explain-config --keybind=copy_to_clipboard
+    ///   blackbox +explain-config --keybind=copy_to_clipboard
     keybind: ?[]const u8 = null,
 
     pub fn deinit(self: Options) void {
@@ -35,10 +35,10 @@ pub const Options = struct {
 ///
 /// Examples:
 ///
-///   ghostty +explain-config font-size
-///   ghostty +explain-config copy_to_clipboard
-///   ghostty +explain-config --option=font-size
-///   ghostty +explain-config --keybind=copy_to_clipboard
+///   blackbox +explain-config font-size
+///   blackbox +explain-config copy_to_clipboard
+///   blackbox +explain-config --option=font-size
+///   blackbox +explain-config --keybind=copy_to_clipboard
 ///
 /// Flags:
 ///
@@ -78,9 +78,9 @@ pub fn run(alloc: Allocator) !u8 {
         var stderr: std.fs.File = .stderr();
         var buffer: [4096]u8 = undefined;
         var stderr_writer = stderr.writer(&buffer);
-        try stderr_writer.interface.writeAll("Usage: ghostty +explain-config <option>\n");
-        try stderr_writer.interface.writeAll("       ghostty +explain-config --option=<option>\n");
-        try stderr_writer.interface.writeAll("       ghostty +explain-config --keybind=<action>\n");
+        try stderr_writer.interface.writeAll("Usage: blackbox +explain-config <option>\n");
+        try stderr_writer.interface.writeAll("       blackbox +explain-config --option=<option>\n");
+        try stderr_writer.interface.writeAll("       blackbox +explain-config --keybind=<action>\n");
         try stderr_writer.end();
         return 1;
     };

@@ -112,7 +112,7 @@
         var ssh-target = $ssh-user"@"$ssh-hostname
 
         # Check if terminfo is already cached
-        if (bool ?($ghostty +ssh-cache --host=$ssh-target)) {
+        if (bool ?($blackbox +ssh-cache --host=$ssh-target)) {
           set ssh-term = "xterm-ghostty"
         } elif (has-external infocmp) {
           var ssh-terminfo = ((external infocmp) -0 -x xterm-ghostty 2>/dev/null | slurp)
@@ -134,7 +134,7 @@
               set ssh-opts = (conj $ssh-opts -o ControlPath=$ssh-cpath)
 
               # Cache successful installation
-              $ghostty +ssh-cache --add=$ssh-target >/dev/null
+              $blackbox +ssh-cache --add=$ssh-target >/dev/null
             } else {
               echo "Warning: Failed to install terminfo." >&2
             }
