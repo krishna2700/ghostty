@@ -452,3 +452,29 @@ _ghostty_deferred_init() {
 }
 
 _entrypoint
+
+# ─── Blackbox Terminal Banner ───────────────────────────────────────────────
+_blackbox_banner() {
+    # Only show on interactive shells, not in tmux/screen sub-shells
+    [[ -o interactive ]] || return
+    [[ -z "$BLACKBOX_BANNER_SHOWN" ]] || return
+    export BLACKBOX_BANNER_SHOWN=1
+
+    printf '\033[0m'  # reset colors
+    printf '\n'
+    printf '\033[1;37m'  # bold white
+    cat << 'EOF'
+  ██████╗ ██╗      █████╗  ██████╗██╗  ██╗██████╗  ██████╗ ██╗  ██╗
+  ██╔══██╗██║     ██╔══██╗██╔════╝██║ ██╔╝██╔══██╗██╔═══██╗╚██╗██╔╝
+  ██████╔╝██║     ███████║██║     █████╔╝ ██████╔╝██║   ██║ ╚███╔╝ 
+  ██╔══██╗██║     ██╔══██║██║     ██╔═██╗ ██╔══██╗██║   ██║ ██╔██╗ 
+  ██████╔╝███████╗██║  ██║╚██████╗██║  ██╗██████╔╝╚██████╔╝██╔╝ ██╗
+  ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝
+EOF
+    printf '\033[0;90m'  # dark gray
+    printf '  The AI-powered terminal  ·  blackbox.ai\n'
+    printf '\033[0m'
+    printf '\n'
+}
+_blackbox_banner
+# ────────────────────────────────────────────────────────────────────────────
