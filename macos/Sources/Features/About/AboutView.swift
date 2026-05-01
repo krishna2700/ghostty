@@ -80,7 +80,7 @@ struct AboutView: View {
 
             VStack(alignment: .center, spacing: 32) {
                 VStack(alignment: .center, spacing: 8) {
-                    Text("Blackbox")
+                    Text("Blackbox Terminal")
                         .bold()
                         .font(.title)
                     Text("The AI-powered terminal.\nFast, native, and feature-rich.")
