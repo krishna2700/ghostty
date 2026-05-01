@@ -1743,7 +1743,7 @@ pub const Window = extern struct {
         _: ?*glib.Variant,
         self: *Self,
     ) callconv(.c) void {
-        const name = "Ghostty";
+        const name = "Blackbox Terminal";
         const icon = "com.mitchellh.ghostty";
         const website = "https://ghostty.org";
 

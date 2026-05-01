@@ -127,7 +127,7 @@ pub fn run(gpa_alloc: std.mem.Allocator) !u8 {
 
     const resources_dir = global_state.resources_dir.app();
     if (resources_dir == null)
-        try stderr.print("Could not find the Ghostty resources directory. Please ensure " ++
+        try stderr.print("Could not find the Blackbox Terminal resources directory. Please ensure " ++
             "that Ghostty is installed correctly.\n", .{});
 
     var count: usize = 0;
