@@ -18,7 +18,11 @@ enum BlackboxIconFixer {
 
         // Load Blackbox icon from app bundle
         guard let iconPath = Bundle.main.path(forResource: "Blackbox", ofType: "icns"),
-              let image = NSImage(contentsOfFile: iconPath) else { return }
+              let rawImage = NSImage(contentsOfFile: iconPath) else { return }
+
+        // Add ~10% padding on each side so the icon appears the same size as
+        // other dock icons (matching the inset applied in DockTilePlugin).
+        let image = paddedIcon(rawImage)
 
         // Set icon permanently via NSWorkspace (Finder reads this)
         NSWorkspace.shared.setIcon(image, forFile: appPath, options: [])
@@ -42,6 +46,26 @@ enum BlackboxIconFixer {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             restartDock()
         }
+    }
+
+    /// Returns a new NSImage with ~10% padding on each side, matching the
+    /// inset used in DockTilePlugin so the icon appears the same size as
+    /// other dock icons when set via NSWorkspace.
+    private static func paddedIcon(_ source: NSImage) -> NSImage {
+        let size = source.size
+        let inset = size.width * 0.05
+        let padded = NSImage(size: size)
+        padded.lockFocus()
+        source.draw(
+            in: CGRect(x: inset, y: inset,
+                       width: size.width - inset * 2,
+                       height: size.height - inset * 2),
+            from: .zero,
+            operation: .sourceOver,
+            fraction: 1.0
+        )
+        padded.unlockFocus()
+        return padded
     }
 
     private static func clearIconCache() {

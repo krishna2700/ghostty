@@ -834,20 +834,16 @@ const Preview = struct {
                 child.fill(.{ .style = self.ui_standard() });
 
                 const save_instructions = [_][]const u8{
-                    "To apply this theme, add the following line to your Ghostty configuration:",
+                    "To apply this theme, add the following line to your Blackbox Terminal configuration:",
                     "",
                     try std.fmt.allocPrint(alloc, "theme = {s}", .{theme.theme}),
                     "",
                     "Save the configuration file and then reload it to apply the new theme.",
                     "",
                     "Or press 'w' to write an auto theme file to your system's preferred default config path.",
-                    "Then add the following line to your Ghostty configuration and reload:",
+                    "Then add the following line to your Blackbox Terminal configuration and reload:",
                     "",
-                    "config-file = ?auto/theme.ghostty",
-                    "",
-                    "For more details on configuration and themes, visit the Ghostty documentation:",
-                    "",
-                    "https://ghostty.org/docs/config/reference",
+                    "config-file = ?auto/theme.blackbox",
                 };
 
                 for (save_instructions, 0..) |instruction, captured_i| {

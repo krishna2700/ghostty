@@ -34,7 +34,7 @@ struct AboutView: View {
             switch self {
             case .stable(let version):
                 let slug = version.replacingOccurrences(of: ".", with: "-")
-                return URL(string: "https://ghostty.org/docs/install/release-notes/\(slug)")
+                return URL(string: "https://blackbox.ai/docs/install/release-notes/\(slug)")
             default:
                 return nil
             }
