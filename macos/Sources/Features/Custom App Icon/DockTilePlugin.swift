@@ -78,7 +78,7 @@ private extension NSDockTile {
             // Inset by ~10% on each side to match standard macOS dock icon padding,
             // preventing the icon from appearing oversized compared to other dock icons.
             let tileSize = self.size
-            let inset = tileSize.width * 0.05
+            let inset = tileSize.width * 0.15
             let iconSize = CGSize(
                 width: tileSize.width - inset * 2,
                 height: tileSize.height - inset * 2

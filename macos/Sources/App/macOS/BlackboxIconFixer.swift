@@ -53,7 +53,7 @@ enum BlackboxIconFixer {
     /// other dock icons when set via NSWorkspace.
     private static func paddedIcon(_ source: NSImage) -> NSImage {
         let size = source.size
-        let inset = size.width * 0.05
+        let inset = size.width * 0.15
         let padded = NSImage(size: size)
         padded.lockFocus()
         source.draw(
