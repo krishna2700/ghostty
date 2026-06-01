@@ -53,7 +53,7 @@ enum BlackboxIconFixer {
     /// other dock icons when set via NSWorkspace.
     private static func paddedIcon(_ source: NSImage) -> NSImage {
         let size = source.size
-        let inset = size.width * 0.15
+        let inset = size.width * 0.095
         let padded = NSImage(size: size)
         padded.lockFocus()
         source.draw(
@@ -74,17 +74,50 @@ enum BlackboxIconFixer {
         try? FileManager.default.removeItem(at: cacheURL)
 
         // Clear dock icon cache
-        let task = Process()
-        task.launchPath = "/usr/bin/find"
-        task.arguments = ["/private/var/folders", "-name", "com.apple.dock.iconcache", "-delete"]
-        try? task.run()
-        task.waitUntilExit()
+        let findTask = Process()
+        findTask.launchPath = "/usr/bin/find"
+        findTask.arguments = ["/private/var/folders", "-name", "com.apple.dock.iconcache", "-delete"]
+        try? findTask.run()
+        findTask.waitUntilExit()
+
+        // Also clear iconservices cache folders
+        let findTask2 = Process()
+        findTask2.launchPath = "/usr/bin/find"
+        findTask2.arguments = ["/private/var/folders", "-name", "com.apple.iconservices", "-delete"]
+        try? findTask2.run()
+        findTask2.waitUntilExit()
+
+        // Touch the app bundle to force Finder/Dock to re-read the icon
+        let appPath = Bundle.main.bundlePath
+        let touchTask = Process()
+        touchTask.launchPath = "/usr/bin/touch"
+        touchTask.arguments = [appPath]
+        try? touchTask.run()
+        touchTask.waitUntilExit()
+
+        // Also touch /Applications path
+        let appName = "Blackbox Terminal.app"
+        let appsPath = "/Applications/\(appName)"
+        if FileManager.default.fileExists(atPath: appsPath) {
+            let touchTask2 = Process()
+            touchTask2.launchPath = "/usr/bin/touch"
+            touchTask2.arguments = [appsPath]
+            try? touchTask2.run()
+            touchTask2.waitUntilExit()
+        }
     }
 
     private static func restartDock() {
-        let task = Process()
-        task.launchPath = "/usr/bin/killall"
-        task.arguments = ["Dock"]
-        try? task.run()
+        // Kill Finder to force icon refresh
+        let finderTask = Process()
+        finderTask.launchPath = "/usr/bin/killall"
+        finderTask.arguments = ["Finder"]
+        try? finderTask.run()
+
+        // Kill Dock
+        let dockTask = Process()
+        dockTask.launchPath = "/usr/bin/killall"
+        dockTask.arguments = ["Dock"]
+        try? dockTask.run()
     }
 }
