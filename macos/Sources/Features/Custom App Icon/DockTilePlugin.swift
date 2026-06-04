@@ -75,20 +75,13 @@ private extension NSDockTile {
                 self.display()
                 return
             }
-            // Inset by ~10% on each side to match standard macOS dock icon padding,
-            // preventing the icon from appearing oversized compared to other dock icons.
+            // Padding is already baked into Blackbox.icns — do NOT apply any inset here.
             let tileSize = self.size
-            let inset = tileSize.width * 0.095
-            let iconSize = CGSize(
-                width: tileSize.width - inset * 2,
-                height: tileSize.height - inset * 2
-            )
-            // Wrap in a transparent container so the dock tile background stays clear
             let container = NSView(frame: CGRect(origin: .zero, size: tileSize))
             container.wantsLayer = true
             container.layer?.backgroundColor = NSColor.clear.cgColor
 
-            let iconView = NSImageView(frame: CGRect(origin: CGPoint(x: inset, y: inset), size: iconSize))
+            let iconView = NSImageView(frame: CGRect(origin: .zero, size: tileSize))
             iconView.wantsLayer = true
             iconView.layer?.backgroundColor = NSColor.clear.cgColor
             iconView.image = newIcon
