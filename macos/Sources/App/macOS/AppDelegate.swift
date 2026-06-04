@@ -204,8 +204,8 @@ class AppDelegate: NSObject,
         // Store our start time
         applicationLaunchTime = ProcessInfo.processInfo.systemUptime
 
-        // Fix Blackbox icon on first launch (clears Ghostty icon cache)
-        BlackboxIconFixer.fixOnFirstLaunch()
+        // Icon padding is baked into Blackbox.icns — no runtime fix needed.
+        // BlackboxIconFixer.fixOnFirstLaunch()
 
         // Check if secure input was enabled when we last quit.
         if UserDefaults.ghostty.bool(forKey: "SecureInput") != SecureInput.shared.enabled {
