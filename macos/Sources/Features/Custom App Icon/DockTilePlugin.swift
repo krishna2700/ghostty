@@ -55,8 +55,8 @@ class DockTilePlugin: NSObject, NSDockTilePlugIn {
             // Use the `Blueprint` icon to distinguish Debug from Release builds.
             appIcon = pluginBundle.image(forResource: "BlueprintImage")!
             #else
-            // Reset to Ghostty.icon
-            appIcon = nil
+            // Use the bundled Blackbox icon so the inset is applied correctly on macOS 26+
+            appIcon = pluginBundle.image(forResource: "AppIconImage") ?? NSImage(named: "Blackbox")
             #endif
         } else {
             // Use the bundled icon to keep the corner radius consistent with pre-Tahoe apps.
