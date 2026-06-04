@@ -107,9 +107,9 @@
 	<key>OSAScriptingDefinition</key>
 	<string>Blackbox.sdef</string>
 	<key>SUEnableAutomaticChecks</key>
-	<false/>
+	<true/>
 	<key>SUPublicEDKey</key>
-	<string>wsNcGf5hirwtdXMVnYoxRIX/SqZQLMOsYlD3q3imeok=</string>
+	<string>WR1hwFnBdb/2cQF6pgTop2B5zrs7g2ggutrkofKiqXY=</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
