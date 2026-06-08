@@ -3365,6 +3365,13 @@ pub fn focusCallback(self: *Surface, focused: bool) !void {
         self.renderer_state.mutex.unlock();
         self.queueIo(.{ .focused = focused }, .unlocked);
     }
+
+    // Scroll to bottom when gaining focus if configured. This is queued
+    // after the focus event so it is processed in order on the IO thread,
+    // ensuring the viewport ends at the bottom after any focus-triggered output.
+    if (focused and self.config.scroll_to_bottom.focus) {
+        self.queueIo(.{ .scroll_viewport = .{ .bottom = {} } }, .unlocked);
+    }
 }
 
 pub fn refreshCallback(self: *Surface) !void {

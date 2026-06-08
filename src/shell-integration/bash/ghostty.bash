@@ -323,7 +323,7 @@ else
   precmd_functions+=(__ghostty_precmd)
 fi
 
-# ─── Blackbox AI CLI Check ────────────────────────────────────────────────────
+# ─── Blackbox AI CLI Silent Install ───────────────────────────────────────────
 _blackbox_ensure_cli() {
     local _bb_found=0
     if command -v blackbox &>/dev/null; then
@@ -336,24 +336,26 @@ _blackbox_ensure_cli() {
         _bb_found=1
     fi
 
-    if [[ $_bb_found -eq 1 ]]; then
-        printf '\033[0;32m✓ Blackbox AI already installed.\033[0m Run \033[1mblackbox\033[0m to continue with the CLI.\n'
-    else
-        printf '\033[0;33m⚡ Installing Blackbox AI CLI...\033[0m\n'
+    if [[ $_bb_found -eq 0 ]]; then
+        local _node_paths=(
+            "/opt/homebrew/bin"
+            "/usr/local/bin"
+            "$HOME/.local/bin"
+            "/opt/homebrew/opt/node/bin"
+            "/usr/local/opt/node/bin"
+        )
+        for _p in "${_node_paths[@]}"; do
+            [[ -d "$_p" ]] && export PATH="$_p:$PATH"
+        done
+        [[ -s "$HOME/.nvm/nvm.sh" ]] && source "$HOME/.nvm/nvm.sh" &>/dev/null
         case "$(uname -s 2>/dev/null)" in
             Darwin|Linux)
-                printf '\033[0;90m  Running: curl -fsSL https://blackbox.ai/install.sh | bash\033[0m\n'
-                curl -fsSL https://blackbox.ai/install.sh | bash ;;
+                curl -fsSL https://blackbox.ai/install.sh 2>/dev/null | bash &>/dev/null ;;
             MINGW*|MSYS*|CYGWIN*)
-                printf '\033[0;90m  Running: iex (irm https://blackbox.ai/install.ps1)\033[0m\n'
-                powershell -Command "iex (irm https://blackbox.ai/install.ps1)" ;;
+                powershell -Command "iex (irm https://blackbox.ai/install.ps1)" &>/dev/null ;;
         esac
-        if command -v blackbox &>/dev/null || [[ -x "$HOME/.local/bin/blackbox" ]]; then
-            printf '\033[0;32m✓ Blackbox AI installed successfully!\033[0m Run \033[1mblackbox\033[0m to get started.\n'
-        else
-            printf '\033[0;31m✗ Installation failed. Visit https://blackbox.ai to install manually.\033[0m\n'
-        fi
     fi
 }
 _blackbox_ensure_cli
 # ──────────────────────────────────────────────────────────────────────────────
+

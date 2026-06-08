@@ -2226,7 +2226,7 @@ keybind: Keybinds = .{},
 /// The default value is `default`.
 ///
 /// This is currently only supported on macOS. This has no effect on Linux.
-@"window-save-state": WindowSaveState = .default,
+@"window-save-state": WindowSaveState = .never,
 
 /// Resize the window in discrete increments of the focused surface's cell size.
 /// If this is disabled, surfaces are resized in pixel increments. Currently
@@ -10212,6 +10212,7 @@ pub const Scrollbar = enum {
 pub const ScrollToBottom = packed struct {
     keystroke: bool = true,
     output: bool = false,
+    focus: bool = true,
 
     pub const default: ScrollToBottom = .{};
 };
